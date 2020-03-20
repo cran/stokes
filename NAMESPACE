@@ -1,0 +1,24 @@
+exportPattern("^[[:alpha:]]+")
+
+export("%^%")
+export("%X%")
+
+import("magrittr")
+import("spray")
+
+importFrom(partitions,blockparts)
+
+importFrom(permutations,allperms)
+importFrom(permutations,sgn)
+importFrom(permutations,word)
+importFrom(permutations,as.word)
+importFrom(permutations,is.id)
+
+importFrom(methods, new)  # not needed but is included to suppress a pointless R CMD check warning
+
+S3method("as.function",ktensor)
+S3method("as.function",kform)
+S3method(Ops,kform)
+S3method(Ops,ktensor)
+S3method("lose",kform)
+S3method("lose",ktensor)
