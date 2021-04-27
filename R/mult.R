@@ -6,12 +6,21 @@
 }
 
 `as.ktensor` <- function(M,coeffs){
-    if(inherits(M,"spray")){return(ktensor(M))}
-    ktensor(spray(M,coeffs))
+    if(is.kform(M)){
+        return(kform_to_ktensor(M))
+    } else if(is.spray(M)){
+        return(ktensor(M))
+    } else {
+        return(ktensor(spray(M,coeffs)))
+    }
 }
 
+`is.ktensor` <- function(x){inherits(x,"ktensor")}
+`is.kform` <- function(x){inherits(x,"kform")}
+
 `as.function.ktensor` <- function(x, ...){
-    stopifnot(inherits(x,"ktensor"))
+    stopifnot(is.ktensor(x))
+    if(is.zero(x)){return(function(E){0})}
     v <- value(x)
     M <- index(x)
     k <- seq_len(ncol(M))
@@ -72,7 +81,7 @@
     return(out)  # should be in alternating form
 }
     
-`Alt` <- function(S){ # Returns Alt(S), an alternating multilinear
+`Alt` <- function(S,give_kform=FALSE){ # Returns Alt(S), an alternating multilinear
                       # function (mathematically equivalent to a form,
                       # but including redundancy)
 
@@ -80,12 +89,14 @@
   ## with a repeated index, as in [1,3,4,1,2] ("1" appears twice).
   ## Then, sort the rows.  Then, sum over all orderings:
 
-    S <- kill_trivial_rows(S)
-    if(nrow(index(S))==0){  # the zero form
-        return(S)
+  if(is.kform(S)){return(S)}
+  if(give_kform){return(kform(S)/factorial(arity(S)))}
+  out <- kill_trivial_rows(S)
+    if(nrow(index(out))==0){  # the zero form
+        return(S*0)
     }
 
-    ktensor(include_perms(consolidate(S))/factorial(ncol(index(S))))
+    ktensor(include_perms(consolidate(out))/factorial(ncol(index(out))))
 }
 
 `cross` <- function(U, ...) {
@@ -120,7 +131,8 @@
 
 `wedge2` <- function(K1,K2){
   if(missing(K2)){return(K1)}
-  if(`|`(!inherits(K1,"kform"), !inherits(K2,"kform"))){return(K1*K2)}
+  if(is.ktensor(K1) | is.ktensor(K2)){stop("wedge product only defined for kforms")}
+  if(`|`(!is.kform(K1),!is.kform(K2))){return(K1*K2)}
 
   if(is.empty(K1) | is.empty(K2)){
     return(zeroform(arity(K1)+arity(K2)))
@@ -159,7 +171,7 @@
 }
 
 `as.kform` <- function(M,coeffs,lose=TRUE){
-    if(inherits(M,"spray")){return(kform(M))}
+    if(is.spray(M)){return(kform(M))}
     if(length(c(M))==0){M <- matrix(1,1,0)} # kludge
     out <- kform(spray(M,coeffs))
     if(lose){out <- lose(out)}
@@ -187,12 +199,14 @@
 }
 
 `rform` <- function(terms=9, k=3, n=7, coeffs){
-    kform(spray(t(replicate(terms,sample(seq_len(n),k))),coeffs,addrepeats=TRUE))
+  if(missing(coeffs)){coeffs <- seq_len(terms)}
+  kform(spray(t(replicate(terms,sample(seq_len(n),k))),seq_len(terms),addrepeats=TRUE))
 }
 
 `rtensor` <- function(terms=9,k=3, n=7, coeffs){
+    if(missing(coeffs)){coeffs <- seq_len(terms)}
     M <- matrix(sample(seq_len(n),terms*k,replace=TRUE),terms,k)
-    ktensor(spray(M,coeffs,addrepeats=TRUE))
+    ktensor(spray(M,seq_len(terms),addrepeats=TRUE))
 }
     
 `as.1form` <- function(v){
@@ -206,9 +220,9 @@
 }
 
 `as.symbolic` <- function(M,symbols=letters,d=""){
-  if(inherits(M,"kform")){
+  if(is.kform(M)){
     prodsymb <- "^"
-  } else if(inherits(M,"ktensor")){
+  } else if(is.ktensor(M)){
     prodsymb <- "*"
   } else {
     stop("only takes ktensor or kform objects")
@@ -279,6 +293,7 @@
 
 `transform` <- function(K,M)
 {
+    if(is.zero(K)){return(K)}
     Reduce(`+`,sapply(seq_along(value(K)),
                       function(i){
                           do.call("wedge",
@@ -359,7 +374,7 @@
 `is.scalar` <- function(M){
   return(
   ((length(M)==1) & is.numeric(M)) ||
-  (inherits(M,"kform") & all(dim(index(M))==c(1,0)))
+  (is.kform(M) & all(dim(index(M))==c(1,0)))
   )
 }
 
@@ -387,3 +402,16 @@ setGeneric("lose",function(x){standardGeneric("lose")})
 }
 
 `lose.ktensor` <- lose.kform 
+
+`zap` <- function(X){UseMethod("zap",X)}
+`zap.kform` <- function(X){kform(spray::zap(X))}
+`zap.ktensor` <- function(X){ktensor(spray::zap(X))}
+
+`kform_to_ktensor` <- function(S){
+    stopifnot(is.kform(S))
+    if(is.zero(S)){
+        return(as.ktensor(index(S),0))
+    } else {
+        return(as.ktensor(include_perms(as.spray(unclass(S)))))
+    }
+}

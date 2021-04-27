@@ -20,6 +20,8 @@ f(E)
 ## -----------------------------------------------------------------------------
 S1 <- as.ktensor(1+diag(4),1:4)
 2*S-3*S1
+
+## -----------------------------------------------------------------------------
 way1 <- as.function(2*S-3*S1)(E)
 way2 <- 2*as.function(S)(E) -3*as.function(S1)(E)
 c(way1,way2)
@@ -75,18 +77,32 @@ Erev <- E[,2:1]
 as.function(Alt(S1))(E) + as.function(Alt(S1))(Erev)  # should be zero
 
 ## -----------------------------------------------------------------------------
-M <- matrix(c(4,2,3,1,2,4),2,3,byrow=TRUE)
+M <- matrix(c(4,2,3,1,4,2),2,3,byrow=TRUE)
 M
 K <- as.kform(M,c(1,5))
 K
 
 ## -----------------------------------------------------------------------------
-M1 <- matrix(c(3,4,5, 4,6,1),2,3,byrow=TRUE)
+dx3 <- as.kform(matrix(3,1,1),1)
+dx3
+
+## -----------------------------------------------------------------------------
+as.function(dx3)(c(14,15,16))
+as.function(dx3)(c(14,15,16,17,18))  # idiom can deal with arbitrary vectors
+
+## -----------------------------------------------------------------------------
+dx5 <- as.kform(matrix(5,1,1),1)
+as.function(dx3 + 2*dx5)(1:10)  # picks out element 3 + 2*element 5
+
+## -----------------------------------------------------------------------------
+M1 <- matrix(c(3,5,4, 4,6,1),2,3,byrow=TRUE)
 K1 <- as.kform(M1,c(2,7))
 K1
 M2 <- cbind(1:5,3:7)
 K2 <- as.kform(M2,1:5)
 K2
+
+## -----------------------------------------------------------------------------
 K1 %^% K2
 
 ## -----------------------------------------------------------------------------
@@ -104,7 +120,7 @@ Krel <- kform_general(4,2,1:6)
 Krel
 
 ## -----------------------------------------------------------------------------
-K1 <- as.kform(matrix(1:4,2,2),1:2)
+K1 <- as.kform(matrix(1:4,2,2),c(1,109))
 K2 <- as.kform(matrix(c(1,3,7,8,2,4),ncol=2,byrow=TRUE),c(-1,5,4))
 K1
 K2
@@ -239,11 +255,13 @@ colnames(Hf1) <- c("w","x","y","z")
 Hf1
 
 ## -----------------------------------------------------------------------------
+ij <- expand.grid(seq_len(nrow(Hf1)),seq_len(ncol(Hf1)))
+
 ddphi <- # should be zero
-  (  
-    +as.kform(which(!is.na(Hf1),arr.ind=TRUE),c(Hf1))
-    +as.kform(which(!is.na(Hf2),arr.ind=TRUE),c(Hf2))
-    +as.kform(which(!is.na(Hf3),arr.ind=TRUE),c(Hf3))
+  (
+    +as.kform(ij,c(Hf1))
+    +as.kform(ij,c(Hf2))
+    +as.kform(ij,c(Hf3))
   )
 
 ddphi
@@ -269,8 +287,7 @@ dphi(1:9)
 
 ## -----------------------------------------------------------------------------
 f <- as.function(dphi(1:9))
-f(diag(9))
 E <- matrix(runif(81),9,9)
 f(E)
-det(E)*f(diag(9))  # should match f(E)
+det(E)*f(diag(9))  # should match f(E) by Spivak's 4.6
 
