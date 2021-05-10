@@ -31,27 +31,19 @@ kform_to_ktensor(S)
     \item Function \code{include_perms()} replaces each row of a
     \code{spray} object with all its permutations, respecting the sign
     of the permutation
-    \item Function \code{ktensor_to_kform()} will coerce a \eqn{k}-form
+    \item Function \code{ktensor_to_kform()} coerces a \eqn{k}-form
     to a \eqn{k}-tensor
   }
 }
 \value{The functions documented here all return a \code{spray} object.}
 \author{Robin K. S. Hankin}
-\seealso{\code{\link{ktensor}},\code{\link{kform}}}
+\seealso{\code{\link{ktensor}},\code{\link{kform}},\code{\link{Alt}}}
 \examples{
 
 S <- spray(matrix(c(1,1,2,2,1,3,3,1,3,5),ncol=2,byrow=TRUE),1:5)
-kill_trivial_rows(S)
-consolidate(S)
 
-## Function include_perms() expects no trivial rows:
-
-\dontrun{include_perms(S)} #  fails (row 1 and row 3 are repeated)
-
-include_perms(kill_trivial_rows(S)) # This should work
-
-a <- rform()
-V <- matrix(rnorm(21),ncol=3)
-as.function(a)(V) - as.function(as.kform(a))(V)  # should be zero
+kill_trivial_rows(S)  # (rows 1 and 3 killed, repeated entries)
+consolidate(S)        # (merges rows 2 and 4)
+include_perms(S)      # returns a spray object, not alternating tensor.
 
 }

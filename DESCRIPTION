@@ -1,9 +1,9 @@
 Package: stokes
 Type: Package
 Title: The Exterior Calculus
-Version: 1.0-7
+Version: 1.0-8
 Depends: spray (>= 1.0-11)
-Suggests: knitr, Deriv, testthat, markdown, rmarkdown
+Suggests: knitr, Deriv, testthat, markdown, rmarkdown, emulator
 VignetteBuilder: knitr
 Imports: permutations (>= 1.0-4), partitions, magrittr, methods,
         mathjaxr
@@ -24,7 +24,7 @@ URL: https://github.com/RobinHankin/stokes
 BugReports: https://github.com/RobinHankin/stokes/issues
 RdMacros: mathjaxr
 NeedsCompilation: no
-Packaged: 2021-04-27 02:10:57 UTC; rhankin
+Packaged: 2021-05-05 21:56:26 UTC; rhankin
 Author: Robin K. S. Hankin [aut, cre] (<https://orcid.org/0000-0001-5982-0415>)
 Repository: CRAN
-Date/Publication: 2021-04-27 05:50:02 UTC
+Date/Publication: 2021-05-10 07:20:02 UTC
