@@ -4,7 +4,13 @@
 \alias{rtensor}
 \alias{rktensor}
 \title{Random kforms and ktensors}
-\description{Random \eqn{k}-form objects and \eqn{k}-tensors,
+\description{
+
+stokes version 1.0-9 is a reduced functionality placeholder package
+pending upload of a newer spray package to CRAN which uses disordR
+discipline.
+
+Random \eqn{k}-form objects and \eqn{k}-tensors,
   intended as quick \dQuote{get you going} examples}
 \usage{
 rform(terms=9,k=3,n=7,coeffs)
@@ -29,15 +35,5 @@ rtensor(terms=9,k=3,n=7,coeffs)
 }
 \author{Robin K. S. Hankin}
 \examples{
-
-rform()
-rform() \%^\% rform()
-
-rtensor() \%X\% rtensor()
-
-dx <- as.kform(1)
-dy <- as.kform(2)
-rform() \%^\% dx
-rform() \%^\% dx \%^\% dy
-
+1+1 # stokes_1.0-9 is a placeholder pending release of spray
 }

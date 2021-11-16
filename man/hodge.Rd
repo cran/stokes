@@ -3,7 +3,14 @@
 \alias{Hodge}
 \alias{star}
 \title{Hodge star operator}
-\description{Given a \eqn{k}-form, return its Hodge dual}
+\description{
+
+stokes version 1.0-9 is a reduced functionality placeholder pending
+upload of a newer spray package to CRAN which uses disordR discipline.
+
+
+
+  Given a \eqn{k}-form, return its Hodge dual}
 \usage{
 hodge(K, n=max(index(K)), g=rep(1,n), lose=TRUE)
 }
@@ -20,16 +27,3 @@ hodge(K, n=max(index(K)), g=rep(1,n), lose=TRUE)
   \eqn{(n-k)}-form.}
 \author{Robin K. S. Hankin}
 \seealso{\code{\link{wedge}}}
-\examples{
-
-hodge(rform())
-
-hodge(kform_general(4,2),g=c(-1,1,1,1))
-
-
-## Some edge-cases:
-hodge(zero(5),9)
-hodge(volume(5))
-hodge(volume(5),lose=TRUE)
-hodge(scalar(7),n=9)
-}

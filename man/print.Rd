@@ -4,6 +4,11 @@
 \alias{print.ktensor}
 \title{Print methods for \eqn{k}-tensors and \eqn{k}-forms}
 \description{
+
+stokes Version 1.0-9 is a reduced functionality placeholder pending
+upload of a newer spray package to CRAN which uses disordR discipline.
+
+
   Print methods for
  objects with options for printing in matrix form
 or multivariate polynomial form
@@ -35,21 +40,6 @@ or multivariate polynomial form
   R^m}{equation omitted}.  In the case of the zero \eqn{k}-form or
   \eqn{k}-tensor, \dQuote{\code{n}} is to be interpreted as \dQuote{any
     \eqn{n\geq 0}{n>=0}}.
-}
-
-\examples{
-
-rform()
-rtensor()
-
-## spray print options work:
-options(polyform = TRUE)
-rtensor()
-
-
-## reset to default 
-options(polyform = FALSE)
-
 }
 
 \keyword{symbolmath}

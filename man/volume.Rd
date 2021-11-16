@@ -3,6 +3,12 @@
 \alias{is.volume}
 \title{The volume element}
 \description{\loadmathjax
+
+stokes Version 1.0-9 is a reduced functionality placeholder pending
+upload of a newer spray package to CRAN which uses disordR discipline.
+
+
+
   The volume element in \eqn{n} dimensions
 }
 \usage{
@@ -43,15 +49,4 @@ volume element.
 }
 \references{Spivak}
 \author{Robin K. S. Hankin}
-\seealso{
-\code{\link{zeroform}},\code{\link{as.1form}}}
-\examples{
-
-as.kform(1) \%^\% as.kform(2) \%^\% as.kform(3)  == volume(3)  # should be TRUE
-
-o <- volume(5)
-M <- matrix(runif(25),5,5)
-det(M) - as.function(o)(M)   # should be zero
-
-
-}
+\seealso{\code{\link{zeroform}},\code{\link{as.1form}}}

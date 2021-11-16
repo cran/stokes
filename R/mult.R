@@ -21,7 +21,7 @@
 `as.function.ktensor` <- function(x, ...){
     stopifnot(is.ktensor(x))
     if(is.zero(x)){return(function(E){0})}
-    v <- value(x)
+    v <- elements(coeffs(x))
     M <- index(x)
     k <- seq_len(ncol(M))
     p <- seq_len(nrow(M))
@@ -34,7 +34,7 @@
     I <- index(S)
     if(length(I)>0){  # cannot use nrow(I)==0, as 'I' might be NULL
       wanted <- apply(I,1,function(x){all(table(x)==1)})
-      out <- spray(I[wanted,,drop=FALSE],value(S)[wanted])
+      out <- spray(I[wanted,,drop=FALSE],elements(coeffs(S))[wanted])
     } else {
       out <- S
     }
@@ -57,7 +57,7 @@
         }
     }  # i loop closes
 
-    out <- spray(newind, value(S)*change_sign, addrepeats=TRUE)  # does a lot of work (potentially)
+    out <- spray(newind, elements(coeffs(S))*change_sign, addrepeats=TRUE)  # does a lot of work (potentially)
     if(length(index(out))==0){ # zero form
       out <- spray(matrix(0,0,ncol(I)))
     }
@@ -75,7 +75,7 @@
     for(i in seq_len(nrow(index(S)))){
       jj <- seq(from=1+(i-1)*factorial(k), to=i*factorial(k))
       outmat[jj,] <- matrix(index(S)[i,,drop=TRUE][p],nrow(p),k,byrow=FALSE)
-      outvec[jj ] <- sgn(p)*value(S)[i]
+      outvec[jj ] <- sgn(p)*elements(coeffs(S))[i]
     }
 
     return(spray(outmat,outvec,addrepeats=TRUE))  # should be  alternating
@@ -111,12 +111,7 @@
     if(is.empty(U1) | is.empty(U2)){
       return(as.ktensor(cbind(index(U1)[0,],index(U2)[0,])))
     }
-
-    M1 <- index(U1)
-    M2 <- index(U2)
-    jj <- as.matrix(expand.grid(seq_len(nrow(M1)),seq_len(nrow(M2))))
-    f <- function(i){c(M1[jj[i,1],],M2[jj[i,2],])}
-    ktensor(spray(t(sapply(seq_len(nrow(jj)),f)),c(outer(value(U1),value(U2)))))
+    stop("not implemented in 1.0-8")
 }
 
 `%X%` <- function(x,y){cross(x,y)}
@@ -138,20 +133,7 @@
     return(zeroform(arity(K1)+arity(K2)))
     }
 
-  ## we need to go through K1 and K2 line by line (wedge product is
-  ## left- and right- distributive).
-  
-  ind1 <- index(K1)
-  var1 <- value(K1)
-  ind2 <- index(K2)
-  var2 <- value(K2)
-  
-  n1 <- length(var1)
-  n2 <- length(var2)
-
-  f <- function(i){c(ind1[i[1],,drop=TRUE],ind2[i[2],,drop=TRUE])}
-  M <- t(apply(expand.grid(seq_len(n1),seq_len(n2)),1,f))
-  as.kform(M, c(outer(var1,var2)))
+  stop("not implemented")
 }
 
 `%^%` <- function(x,y){wedge(x,y)}
@@ -187,7 +169,7 @@
 
 `as.function.kform` <- function(x, ...){
     M <- index(x)
-    coeffs <- value(x)
+    coeffs <- elements(coeffs(x))
     return(function(E){
       out <- 0
       E <- cbind(E)
@@ -229,7 +211,7 @@
   }
   
   IM <- index(M)
-  v <- value(M)
+  v <- elements(coeffs(M))
 
   out <- ""
   for(i in seq_len(nrow(IM))){
@@ -257,12 +239,12 @@
       return(kform(spray(matrix(1,0,n-arity(K)),1)))
     }
   } else if(is.volume(K)){
-    return(scalar(value(K),lose=lose))
+    return(scalar(coeffs(K),lose=lose))
   } else if(is.scalar(K)){
     if(missing(n)){
       stop("K is scalar but no value of n is supplied")
     } else {
-      return(volume(n)*value(K))
+      return(volume(n)*coeffs(K))
     }
   } # weird edge-cases end
         
@@ -282,7 +264,7 @@
   iK <- cbind(iK,newindex)
   x1 <- apply(iK,1,f2)
   x2 <- apply(iK,1,f3)
-  x3 <- value(K)
+  x3 <- elements(coeffs(K))
 
   as.kform(newindex,x1*x2*x3)
 }
@@ -294,19 +276,19 @@
 `transform` <- function(K,M)
 {
     if(is.zero(K)){return(K)}
-    Reduce(`+`,sapply(seq_along(value(K)),
+    Reduce(`+`,sapply(seq_along(coeffs(K)),
                       function(i){
                           do.call("wedge",
                                   apply(
                                       M[index(K)[i,,drop=FALSE],,drop=FALSE],1,
-                                      as.1form))*value(K)[i]},simplify=FALSE))
+                                      as.1form))*elements(coeffs(K))[i]},simplify=FALSE))
 }
 
 `issmall` <- function(M,tol=1e-8){  # tests for a kform being either zero or "small"
     if(is.zero(M)){
         return(TRUE)
     } else {
-        error <- value(M)
+        error <- coeffs(M)
         if(all(abs(error)<tol)){
             return(TRUE)
         } else {
@@ -320,7 +302,7 @@
   M <- index(K)
   d <- d[seq_len(max(M))]
   M[] <- d[M]  # the meat
-  as.kform(index(K),value(K)*apply(M,1,prod))
+  as.kform(index(K),elements(coeffs(K))*apply(M,1,prod))
 }
   
 `keep` <- function(K,yes){
@@ -348,7 +330,7 @@
 
 `contract` <- function(K,v,lose=TRUE){
     if(is.vector(v)){
-        out <- Reduce("+",Map("*", apply(index(K),1,contract_elementary,v),value(K)))
+        out <- Reduce("+",Map("*", apply(index(K),1,contract_elementary,v),coeffs(K)))
     } else {
         stopifnot(is.matrix(v))
         out <- K
@@ -395,7 +377,7 @@ setGeneric("lose",function(x){standardGeneric("lose")})
 `lose` <- function(M){UseMethod("lose",M)}
 `lose.kform` <- function(M){
     if(arity(M)==0){
-        return(value(M))
+        return(coeffs(M))
     } else {
         return(M)
     }
@@ -415,3 +397,6 @@ setGeneric("lose",function(x){standardGeneric("lose")})
         return(as.ktensor(include_perms(as.spray(unclass(S)))))
     }
 }
+
+`coeffs` <- function(S){stop("deprecated")}
+`coeffs<-` <- function(S,value){stop("deprecated")}

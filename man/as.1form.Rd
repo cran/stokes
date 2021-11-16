@@ -3,6 +3,12 @@
 \alias{grad}
 \title{Coerce vectors to 1-forms}
 \description{\loadmathjax
+
+  stokes version 1.0-9 is a reduced functionality placeholder package
+pending upload of a newer spray package to CRAN which uses disordR
+discipline.
+
+
   Given a vector, return the corresponding 1-form; the exterior
   derivative of a 0-form (that is, a scalar function).  Function
   \code{grad()} is a synonym.
@@ -63,16 +69,3 @@ examples for appropriate R idiom.
 \value{A one-form}
 \author{Robin K. S. Hankin}
 \seealso{\code{\link{kform}}}
-\examples{
-
-as.1form(1:9)  # note ordering of terms
-
-
-as.1form(rnorm(20))
-
-grad(c(4,7)) \%^\% grad(1:4)
-
-
-
-
-}

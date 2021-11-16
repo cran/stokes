@@ -38,12 +38,3 @@ kform_to_ktensor(S)
 \value{The functions documented here all return a \code{spray} object.}
 \author{Robin K. S. Hankin}
 \seealso{\code{\link{ktensor}},\code{\link{kform}},\code{\link{Alt}}}
-\examples{
-
-S <- spray(matrix(c(1,1,2,2,1,3,3,1,3,5),ncol=2,byrow=TRUE),1:5)
-
-kill_trivial_rows(S)  # (rows 1 and 3 killed, repeated entries)
-consolidate(S)        # (merges rows 2 and 4)
-include_perms(S)      # returns a spray object, not alternating tensor.
-
-}

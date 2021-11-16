@@ -33,8 +33,29 @@ is.kform(x)
 }
 \details{
 
-  A \dfn{\eqn{k}-form} is an alternating \eqn{k}-tensor.  
+  A \dfn{\eqn{k}-form} is an alternating \eqn{k}-tensor.  In the
+  \pkg{stokes} package, \eqn{k}-forms are represented as sparse arrays
+  (\code{spray} objects), but with a class of \code{c("kform",
+  "spray")}.  The constructor function \code{kform()} takes a
+  \code{spray} object and returns a \code{kform} object: it ensures
+  that rows of the index matrix are strictly nonnegative integers, have
+  no repeated entries, and are strictly increasing.  Function
+  \code{as.kform()} is more user-friendly.
 
+  \itemize{
+    \item\code{kform()} is the constructor function.  It takes a
+    \code{spray} object and returns a \code{kform}.
+    \item\code{as.kform()} also returns a \code{kform} but is a bit more
+    user-friendly  than \code{kform()}.
+    \item\code{kform_basis()} is a low-level helper function that 
+    returns a matrix whose rows constitute a basis for the vector space
+    \mjeqn{\Lambda^k(R^n)}{L^k(R^n)} of \eqn{k}-forms.
+    \item\code{kform_general()} returns a \code{kform} object with terms
+    that span the space of alternating tensors.
+    \item\code{is.kform()} returns \code{TRUE} if its argument is a
+    \code{kform} object.
+  }
+  
   Recall that a \eqn{k}-tensor is a multilinear map from \eqn{V^k} to
   the reals, where \eqn{V=R^n} is a vector space.  A multilinear
   \eqn{k}-tensor \eqn{T} is \dfn{alternating} if it satisfies
@@ -43,9 +64,12 @@ is.kform(x)
     T\left(v_1,\ldots,v_j,\ldots,v_i,\ldots,v_k\right)
   }{omitted; see latex}
   
+  In the package, an object of class \code{kform} is an efficient
+  representation of an alternating tensor.
+  
   Function \code{kform_basis()} is a low-level helper function that
   returns a matrix whose rows constitute a basis for the vector space
-  \mjeqn{\Lambda^k(R^n)}{L^k(R^n)} of \eqn{k}-tensors:
+  \mjeqn{\Lambda^k(R^n)}{L^k(R^n)} of \eqn{k}-forms:
   
   \mjdeqn{\phi=\sum_{1\leq i_1 < \cdots < i_k\leq n} a_{i_1\ldots i_k}dx_{i_1}\wedge\cdots\wedge dx_{i_k}}{omitted; see latex}
 
@@ -57,16 +81,12 @@ is.kform(x)
   where \mjeqn{\mathbf{e}_j,1\leq j\leq k}{e_j,1<=j<=k} is a basis for
   \eqn{V}.
   
-  In the \pkg{stokes} package, \eqn{k}-forms are represented as sparse
-  arrays (\code{spray} objects), but with a class of \code{c("kform",
-    "spray")}.  The constructor function (\code{kform()}) ensures that rows
-  of the index matrix are strictly nonnegative integers, have no repeated
-  entries, and are strictly increasing.
   
 }
 \value{
   All functions documented here return a \code{kform} object except
-  \code{as.function.kform()}, which returns a function.
+  \code{as.function.kform()}, which returns a function, and
+  \code{is.kform()}, which returns a Boolean.
 }
 \references{Hubbard and Hubbard; Spivak}
 \author{Robin K. S. Hankin}
@@ -75,20 +95,3 @@ is.kform(x)
   does not.
 }
 \seealso{\code{\link{ktensor}},\code{\link{lose}}}
-\examples{
-
-as.kform(cbind(1:5,2:6),rnorm(5))
-kform_general(1:4,2,coeffs=1:6)  # used in electromagnetism
-
-K1 <- as.kform(cbind(1:5,2:6),rnorm(5))
-K2 <- kform_general(5:8,2,1:6)
-wedge(K1,K2)
-
-
-f <- as.function(wedge(K1,K2))
-E <- matrix(rnorm(32),8,4)
-
-f(E) + f(E[,c(1,3,2,4)])  # should be zero
-
-
-}

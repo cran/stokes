@@ -2,6 +2,11 @@
 \alias{Alt}
 \title{Alternating multilinear forms}
 \description{\loadmathjax
+
+stokes version 1.0-9 is a reduced functionality placeholder package
+pending upload of a newer spray package to CRAN which uses disordR
+discipline.
+
   Converts a \eqn{k}-tensor to alternating form
 }
 \usage{Alt(S,give_kform)}
@@ -46,7 +51,9 @@
   class \code{ktensor}; but if given a \code{kform} object, it just
   returns its argument unchanged.
 
-  See also the `Alt` vignette which contains more details and examples.
+
+  A short vignette is provided with the package: type
+  \code{vignette("Alt")} at the commandline.
 
 } 
 \value{
@@ -56,16 +63,3 @@
 }
 \author{Robin K. S. Hankin}
 \seealso{\code{\link{kform}}}
-\examples{
-
-S <- as.ktensor(expand.grid(1:3,1:3),rnorm(9))
-S
-Alt(S)
-
-issmall(Alt(S) - Alt(Alt(S)))  # should be TRUE
-
-a <- rtensor()
-a
-V <- matrix(rnorm(21),ncol=3)
-c(as.function(Alt(a))(V), as.function(Alt(a,give_kform=TRUE))(V)) # should match
-}

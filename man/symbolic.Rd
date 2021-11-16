@@ -3,6 +3,13 @@
 \alias{as.symbolic}
 \title{Symbolic form}
 \description{\loadmathjax
+
+
+stokes version 1.0-9 is a reduced functionality placeholder pending
+upload of a newer spray package to CRAN which uses disordR discipline.
+
+
+
   Prints \eqn{k}-tensor and \eqn{k}-form objects in symbolic form
 }
 \usage{
@@ -16,10 +23,3 @@ as.symbolic(M,symbols=letters,d="")
 }
 \value{Returns a noquote character string.}
 \author{Robin K. S. Hankin}
-\examples{
-
-as.symbolic(rtensor())
-as.symbolic(rform())
-
-as.symbolic(kform_general(3,2,1:3),d="d",symbols=letters[23:26])
-}

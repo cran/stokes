@@ -28,7 +28,7 @@ and \mjeqn{\mathbf{v}}{v} is a \mjseqn{k-1}-form with
   \phi_\mathbf{v}\left(\mathbf{v}^1,\ldots,\mathbf{v}^{k-1}\right) =
   \phi\left(\mathbf{v},\mathbf{v}^1,\ldots,\mathbf{v}^{k-1}\right)
   }{
-ommitted; see PDF}
+omitted; see PDF}
 
 if \mjseqn{k>1}; we specify
 \mjeqn{\phi_\mathbf{v}=\phi(\mathbf{v})}{phi_v=phi(v)} if \mjseqn{k=1}.
@@ -48,22 +48,3 @@ chapter 2, page 77).
 }
 \author{Robin K. S. Hankin}
 \seealso{\code{\link{wedge}},\code{\link{lose}}}
-\examples{
-contract(as.kform(1:5),1:8)
-contract(as.kform(1),3)   # 0-form
-
-
-## Now some verification:
-o <- kform(spray(t(replicate(2, sample(9,5))), runif(2)))
-V <- matrix(rnorm(45),ncol=5)
-jj <- c(
-   as.function(o)(V),
-   as.function(contract(o,V[,1,drop=TRUE]))(V[,-1]), # scalar
-   as.function(contract(o,V[,1:2]))(V[,-(1:2),drop=FALSE]),
-   as.function(contract(o,V[,1:3]))(V[,-(1:3),drop=FALSE]),
-   as.function(contract(o,V[,1:4]))(V[,-(1:4),drop=FALSE]),
-   as.function(contract(o,V[,1:5],lose=FALSE))(V[,-(1:5),drop=FALSE])
-)
-
-max(jj) - min(jj) # zero to numerical precision
-}

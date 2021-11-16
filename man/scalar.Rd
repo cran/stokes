@@ -7,7 +7,16 @@
 \alias{lose.ktensor}
 \alias{drop}
 \title{Lose attributes}
-\description{Scalars: \eqn{0}-forms and \eqn{0}-tensors}
+\description{
+
+
+stokes version 1.0-9 is a reduced functionality placeholder pending
+upload of a newer spray package to CRAN which uses disordR discipline.
+
+
+
+
+  Scalars: \eqn{0}-forms and \eqn{0}-tensors}
 \usage{
 scalar(s,lose=FALSE)
 is.scalar(M)
@@ -50,14 +59,3 @@ zero.
 }
 \author{Robin K. S. Hankin}
 \seealso{\code{\link{zeroform}},\code{\link{lose}}}
-
-\examples{
-
-o <- scalar(5)
-o
-lose(o)
-
-kform_general(1,0)  
-kform_general(1,0,lose=FALSE)
-
-}
