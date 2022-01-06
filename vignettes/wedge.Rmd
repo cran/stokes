@@ -1,0 +1,206 @@
+---
+title: "`wedge()` and related functions in the `stokes` package"
+author: "Robin K. S. Hankin"
+output: html_document
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{wedge}
+  %\usepackage[utf8]{inputenc}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library("stokes")
+library("emulator")
+set.seed(0)
+```
+
+<p style="text-align: right;">
+![](`r system.file("help/figures/stokes.png", package = "stokes")`){width=10%}
+</p>
+
+```{r}
+wedge
+wedge2
+```
+
+Function `wedge()` returns the wedge product of any number of kforms,
+function `wedge2()` returns the wedge product of two kforms.  Spivak
+gives us:
+
+\[
+\omega\wedge\eta=\frac{\left(k+l\right)!}{k!l!}\operatorname{Alt}(\omega\otimes\eta),\qquad\omega\in\Lambda^k(V),\eta\in\Lambda^l(V)
+\]
+
+Function `wedge2()` implements this, although the idiom is somewhat
+opaque, especially the combinatorial coefficient $(k+l)!/(k!l!)$.
+
+
+## Digression: function `spraycross()`
+
+Function `wedge()` is essentially a convenience wrapper for
+`spraycross()`.  Function `spraycross()` it is part of the `spray`
+package and gives a cross product of sparse arrays, interpreted as
+multivariate polynomials:
+
+```{r}
+(a <- spray(matrix(1:4,2,2),c(2,5)))
+(b <- spray(matrix(c(10,11,12,13),2,2),c(7,11)))
+spraycross(a,b)
+spraycross(b,a)
+```
+
+Observe that `spraycross()` (and by association `wedge()`)is
+associative and distributive but not commutative.
+
+### Cut to the chase: `wedge2()`
+
+Function `wedge2()` takes two kforms and we will start with a very
+simple example:
+
+```{r}
+(x <- as.kform(cbind(1,2),5))
+(y <- as.kform(cbind(3,4,7),7))
+wedge2(x,y)
+```
+
+It looks like the combinatorial term has not been included but it has.
+We will express `x` and `y` as tensors (objects of class `ktensor`)
+and show how the combinatorial term arises.
+
+```{r}
+ tx <- as.ktensor(x)    # "tx" = tensor 'x'
+(ty <- as.ktensor(y))   # "ty" = tensor 'y'
+```
+
+As functions, `y` and `ty` are identical:
+
+```{r}
+M <- matrix(round(rnorm(21),2),7,3) # member of (R^7)^3
+c(as.function(y)(M),as.function(ty)(M))
+```
+
+Both are equivalent to
+
+```{r}
+7*(
+ +M[3,1]*M[4,2]*M[7,3] 
+ -M[3,1]*M[4,3]*M[7,2] 
+ -M[3,2]*M[4,1]*M[7,3] 
+ +M[3,2]*M[4,3]*M[7,1] 
+ +M[3,3]*M[4,1]*M[7,2]
+ -M[3,3]*M[4,2]*M[7,1]
+ )
+```
+
+We can see that `y` is a more compact and efficient representation of
+`ty`: both are alternating tensors but `y` has alternatingness built in
+to its evaluation, while `ty` is alternating by virtue of including
+all permutations of its arguments, with the sign of the permutation.
+
+
+We can evaluate Spivak's formula (but without the combinatorical term)
+for $x\wedge y$ by coercing to ktensors and using `cross()`:
+
+```{r}
+(z <- cross(as.ktensor(x),as.ktensor(y)))
+```
+
+Above, each coefficient is equal to $\pm 35$ (the sign coming from the
+sign of the permutation), and we have $2!3!=12$ rows.  We can now
+calculate $\operatorname{Alt}(z)$, which would have $5!=120$ rows, one
+per permutation of $[5]$, each with coefficient $\pm\frac{12\times
+35}{5!}=\pm 3.5$.
+
+We define $x\wedge y$ to be $\frac{5!}{3!2!}\operatorname{Alt}(z)$, so
+each coefficient would be $\pm\frac{5!}{3!2!}\cdot\frac{12\times
+35}{5!}=35$.  We know that $x\wedge y$ is an alternating form.  So to
+represent it as an object of class `kform`, we need a `kform` object
+with _single_ index entry `1 2 3 4 7`.  This would need coefficient
+35, on the grounds that it is linear, alternating, and maps
+$\begin{pmatrix}
+1&0&0&0&0\\
+0&1&0&0&0\\
+0&0&1&0&0\\
+0&0&0&1&0\\
+0&0&0&0&0\\
+0&0&0&0&0\\
+0&0&0&0&1
+\end{pmatrix}$ to $35$; and indeed this is what we see:
+
+```{r}
+wedge(x,y)
+```
+
+So to conclude, the combinatorial term is present in the R idiom, it
+is just difficult to see at first glance.
+
+# Algebraic properties
+
+First of all we should note that $\Lambda^k(V)$ is a vector space
+(this is considered in the `kform` vignette).  If
+$\omega,\omega_i\in\Lambda^k(V)$ and $\eta,\eta_i\in\Lambda^l(V)$ then
+
+\begin{eqnarray}
+(\omega_1+\omega_2)\wedge\eta &=& \omega_1\wedge\eta+\omega_2\wedge\eta\\
+\omega\wedge(\eta_1+\eta_2) &=&\omega\wedge\eta_1 + \omega\wedge\eta_2\\
+\end{eqnarray}
+
+(that is, the wedge product is left- and right- distributive); if
+$a\in\mathcal{R}$ then
+
+\begin{equation}
+a\omega\wedge\eta = \omega\wedge a\eta=a(\omega\wedge\eta)
+\end{equation}
+
+and
+\begin{equation}
+\omega\wedge\eta = (-1)^{kl}\eta\wedge\omega\\\
+\end{equation}
+
+These rules make expansion of wedge products possible by expressing a
+general kform in terms of basis for $\Lambda^k(V)$.  Spivak tells us
+that, if $v_1,\ldots,v_k$ is a basis for $V$, then the set of all
+
+\begin{equation}
+\phi_{i_1}\wedge\phi_{i_2}\wedge\cdots\wedge\phi_{i_k}\qquad 1\leq i_1 < \cdots < i_n\leq n
+\end{equation}
+
+is a basis for $\Lambda^k(V)$ where $\phi_i(v_j)=\delta_{ij}$.  The
+package expresses a $k$-form in terms of this basis as in the
+following example:
+
+
+```{r}
+(omega <- as.kform(rbind(c(1,2,8),c(1,3,7)),5:6))
+```
+
+In algebraic notation, `omega` (or $\omega$) would be
+$5\phi_1\wedge\phi_2\wedge\phi_8+6\phi_1\wedge\phi_3\wedge\phi_7$ and
+we may write this as $\omega=5\phi_{128}+6\phi_{137}$.  To take a
+wedge product of this with $\eta=2\phi_{235}+3\phi_{356}$ we would
+write
+
+\begin{eqnarray}
+\omega\wedge\eta &=& (5\phi_{128}+6\phi_{137})\wedge (2\phi_{235}+3\phi_{356})\\
+&=& 10\phi_{128}\wedge\phi_{235} + 15\phi_{128}\wedge\phi_{356} +
+    12\phi_{137}\wedge\phi_{235} + 18\phi_{137}\wedge\phi_{356}\\
+&=&
+10\phi_1\wedge\phi_2\wedge\phi_8\wedge\phi_2\wedge\phi_3\wedge\phi_5 + 
+15\phi_1\wedge\phi_2\wedge\phi_8\wedge\phi_3\wedge\phi_5\wedge\phi_6\\&{}&\qquad + 
+12\phi_1\wedge\phi_3\wedge\phi_7\wedge\phi_2\wedge\phi_3\wedge\phi_5 +
+18\phi_1\wedge\phi_3\wedge\phi_7\wedge\phi_3\wedge\phi_5\wedge\phi_6\\
+&=& 0+ 15\phi_1\wedge\phi_2\wedge\phi_8\wedge\phi_3\wedge\phi_5\wedge\phi_6+0+0\\
+&=& -15\phi_1\wedge\phi_2\wedge\phi_3\wedge\phi_5\wedge\phi_6\wedge\phi_8
+\end{eqnarray}
+
+where we have used the rules repeatedly (especially the fact that
+$\omega\wedge\omega=0$ for _any_ alternating form).  Package idiom
+would be:
+
+```{r}
+eta <- as.kform(rbind(c(2,3,5),c(3,5,6)),2:3)
+wedge(omega,eta)
+```
+
+See how function `wedge()` does the legwork.

@@ -3,14 +3,8 @@
 \alias{Hodge}
 \alias{star}
 \title{Hodge star operator}
-\description{
-
-stokes version 1.0-9 is a reduced functionality placeholder pending
-upload of a newer spray package to CRAN which uses disordR discipline.
-
-
-
-  Given a \eqn{k}-form, return its Hodge dual}
+\description{\loadmathjax
+  Given a \mjseqn{k}-form, return its Hodge dual}
 \usage{
 hodge(K, n=max(index(K)), g=rep(1,n), lose=TRUE)
 }
@@ -23,7 +17,20 @@ hodge(K, n=max(index(K)), g=rep(1,n), lose=TRUE)
   \item{lose}{Boolean, with default \code{TRUE} meaning to coerce to a
     scalar if appropriate}
 }
-\value{Given a \eqn{k}-form, in an \eqn{n}-dimensional space, returns a
-  \eqn{(n-k)}-form.}
+\value{Given a \mjseqn{k}-form, in an \mjseqn{n}-dimensional space, returns a
+  \mjseqn{(n-k)}-form.}
 \author{Robin K. S. Hankin}
 \seealso{\code{\link{wedge}}}
+\examples{
+
+hodge(rform())
+
+hodge(kform_general(4,2),g=c(-1,1,1,1))
+
+
+## Some edge-cases:
+hodge(zero(5),9)
+hodge(volume(5))
+hodge(volume(5),lose=TRUE)
+hodge(scalar(7),n=9)
+}

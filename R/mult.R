@@ -111,7 +111,7 @@
     if(is.empty(U1) | is.empty(U2)){
       return(as.ktensor(cbind(index(U1)[0,],index(U2)[0,])))
     }
-    stop("not implemented in 1.0-8")
+    return(ktensor(spraycross(U1,U2)))
 }
 
 `%X%` <- function(x,y){cross(x,y)}
@@ -133,7 +133,7 @@
     return(zeroform(arity(K1)+arity(K2)))
     }
 
-  stop("not implemented")
+  kform(spraycross(K1,K2))
 }
 
 `%^%` <- function(x,y){wedge(x,y)}
@@ -159,6 +159,8 @@
     if(lose){out <- lose(out)}
     return(out)
 }
+
+`d` <- function(i){as.kform(i)}
 
 `kform_general`  <- function(W,k,coeffs,lose=TRUE){
     if(length(W)==1){W <- seq_len(W)}
@@ -339,7 +341,7 @@
         }
     }
     if(lose){out <- lose(out)}
-    return(out)
+    return(disordR::drop(out))
 }
 
 `scalar` <- function(s,lose=FALSE){
@@ -398,5 +400,26 @@ setGeneric("lose",function(x){standardGeneric("lose")})
     }
 }
 
-`coeffs` <- function(S){stop("deprecated")}
-`coeffs<-` <- function(S,value){stop("deprecated")}
+`coeffs<-.kform` <- function(S,value){
+    jj <- coeffs(S)
+    if(is.disord(value)){
+        stopifnot(consistent(coeffs(S),value))
+        if((!identical(hash(jj),hash(value))) & (length(value)>1)){stop("length > 1")}
+        jj <- value
+    } else {
+        jj[] <- value  # the meat
+    }
+    return(kform(spray(index(S),elements(jj))))
+}
+
+`coeffs<-.ktensor` <- function(S,value){
+    jj <- coeffs(S)
+    if(is.disord(value)){
+        stopifnot(consistent(coeffs(S),value))
+        if((!identical(hash(jj),hash(value))) & (length(value)>1)){stop("length > 1")}
+        jj <- value
+    } else {
+        jj[] <- value  # the meat
+    }
+    return(ktensor(spray(index(S),elements(jj))))
+}

@@ -10,7 +10,7 @@
 \arguments{
   \item{M}{square matrix}
 }
-\value{Returns a \eqn{k}-tensor, an inner product}
+\value{Returns a \mjseqn{k}-tensor, an inner product}
 \details{
 
 The inner product of two vectors \mjeqn{\mathbf{x}}{x} and
@@ -26,7 +26,7 @@ we see that the inner product is indeed a multilinear map, that is, a
 tensor.
 
 Given a square matrix \mjseqn{M}, function \code{inner(M)} returns the
-\eqn{2}-form that maps \mjeqn{\mathbf{x},\mathbf{y}}{x,y} to
+\mjseqn{2}-form that maps \mjeqn{\mathbf{x},\mathbf{y}}{x,y} to
 \mjeqn{\mathbf{x}^TM\mathbf{y}}{x'My}.
 
 A short vignette is provided with the package: type
@@ -35,3 +35,21 @@ A short vignette is provided with the package: type
 }
 \author{Robin K. S. Hankin}
 \seealso{\code{\link{kform}}}
+\examples{
+
+inner(diag(7))
+inner(matrix(1:9,3,3))
+
+## Compare the following two:
+Alt(inner(matrix(1:9,3,3)))      # An alternating k tensor
+as.kform(inner(matrix(1:9,3,3))) # Same thing coerced to a kform
+
+f <- as.function(inner(diag(7)))
+X <- matrix(rnorm(14),ncol=2)  # random element of (R^7)^2
+f(X) - sum(X[,1]*X[,2]) # zero to numerical precision
+
+## verify positive-definiteness:
+g <- as.function(inner(crossprod(matrix(rnorm(56),8,7))))
+stopifnot(g(kronecker(rnorm(7),t(c(1,1))))>0)
+
+}

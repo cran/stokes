@@ -14,7 +14,7 @@
             stop("Unary operator '", .Generic, "' is not implemented for kforms")
         }
     }
-    if (!is.element(.Generic, c("+", "-", "*", "/", "==", "!="))){
+    if (!is.element(.Generic, c("+", "-", "*", "/", "==", "!=", "^"))){
         stop("operator '", .Generic, "' is not implemented for kforms")
     }
 
@@ -28,9 +28,8 @@
             return(f(e1) == f(e2))
         } else if(.Generic == "!="){
             return(f(e1) != f(e2))
-        } else if(.Generic == "*"){
-            ## stop('To multiply two kforms, use the wedge product "%^%"')
-            return(wedge(e1,e2))
+        } else if(.Generic == "^"){
+            return(wedge2(e1,e2))
         } else {
             stop("Binary operator '", .Generic, "' is not implemented for kforms")
         }
@@ -39,6 +38,8 @@
             return(as.kform(f(e1)*e2))
         } else if(.Generic == "/"){
             return(as.kform(f(e1)/e2))
+        } else if(.Generic == "^"){
+            return(as.kform(f(e1)*e2))
         } else {
             stop("Binary operator '", .Generic, "' is not implemented for kform <op> other ")
         }
@@ -47,6 +48,8 @@
             return(as.kform(f(e2)*e1))
         } else if(.Generic == "/"){
             stop("kforms are not a field")
+        } else if(.Generic == "^"){
+            return(as.kform(e1*f(e2)))
         } else {
             stop("Binary operator '", .Generic, "' is not implemented for other <op> kform")
         }

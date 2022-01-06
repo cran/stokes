@@ -7,12 +7,7 @@
 \alias{zap.kform}
 \alias{zap.ktensor}
 \title{Zap small values in \eqn{k}-forms and \eqn{k}-tensors}
-\description{
-
-stokes Version 1.0-9 is a reduced functionality placeholder pending
-upload of a newer spray package to CRAN which uses disordR discipline.
-
-
+\description{\loadmathjax
 Equivalent to \code{zapsmall()}}
 \usage{
 zap(X)
@@ -20,7 +15,7 @@ zap(X)
 \method{zap}{ktensor}(X)
 }
 \arguments{
-  \item{X}{Tensor or \eqn{k}-form to be zapped}
+  \item{X}{Tensor or \mjseqn{k}-form to be zapped}
 }
 \details{
 
@@ -34,3 +29,8 @@ zap(X)
 }
 \value{Returns an object of the same class}
 \author{Robin K. S. Hankin}
+\examples{
+
+S <- rform(7)
+S == zap(S)
+}

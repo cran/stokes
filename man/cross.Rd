@@ -4,13 +4,6 @@
 \alias{\%X\%}
 \title{Cross products of \eqn{k}-tensors}
 \description{\loadmathjax
-
-stokes Version 1.0-9 is a reduced functionality placeholder pending
-upload of a newer spray package to CRAN which uses disordR discipline.
-
-
-
-
   Cross products of \eqn{k}-tensors}
 \usage{
 cross(U, ...)
@@ -42,4 +35,17 @@ The binary form \code{\%X\%} uses uppercase X to avoid clashing with
 \code{\%x\%} which is the Kronecker product in base \R.
 }
 \author{Robin K. S. Hankin}
-\seealso{\code{\link{ktensor}}}
+\seealso{\code{\link{ktensor}}
+}
+\examples{
+M <- cbind(1:4,2:5)
+U1 <- as.ktensor(M,rnorm(4))
+U2 <- as.ktensor(t(M),1:2)
+
+cross(U1, U2)
+cross(U2, U1)  # not the same!
+
+U1 \%X\% U2 - U2 \%X\% U1
+
+
+}
