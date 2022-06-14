@@ -1,10 +1,11 @@
 \name{Ops.kform}
 \alias{Ops.kform}
+\alias{Ops.stokes}
 \alias{Ops.ktensor}
 \alias{Ops}
 \title{Arithmetic Ops Group Methods for \code{kform} and \code{ktensor}
   objects}
-\description{
+\description{\loadmathjax
   Allows arithmetic operators to be used for \mjseqn{k}-forms and
   \mjseqn{k}-tensors such as addition, multiplication, etc, where
   defined.
@@ -19,39 +20,63 @@
 \details{
   The functions \code{Ops.kform()} and \code{Ops.ktensor()} pass unary
   and binary arithmetic operators (\dQuote{\code{+}}, \dQuote{\code{-}},
-  \dQuote{\code{*}}, and \dQuote{\code{/}}) to the appropriate
-  specialist function by coercing to \code{spray} objects.
+  \dQuote{\code{*}}, \dQuote{\code{/}} and \dQuote{\code{^}}) to the
+  appropriate specialist function by coercing to \code{spray} objects.
 
   For wedge products of \mjseqn{k}-forms, use \code{wedge()} or
-  \code{\%^\%}; and for cross products of \mjseqn{k}-tensors, use
-  \code{cross()} or \code{\%X\%}.
+  \code{\%^\%} or \code{^}; and for cross products of
+  \mjseqn{k}-tensors, use \code{cross()} or \code{\%X\%}.
 }
-
 \value{All functions documented here return an object of class
   \code{kform} or \code{ktensor}.
 }
 \author{Robin K. S. Hankin}
 \note{
 
-  A plain asterisk, \dQuote{\code{*}}, given two ktensors, will return
-  the cross product, on the grounds that the idiom has only one natural
-  interpretation.  But its use is discouraged.
+  A plain asterisk, \dQuote{\code{*}} behaves differently for ktensors
+  and kforms.  Given two ktensors \code{T1}, \code{T2}, then
+  \dQuote{\code{T1*T2}} will return the their tensor cross product.
+  This on the grounds that the idiom has only one natural
+  interpretation.  But its use is discouraged (use \code{\%X\%} or
+  \code{cross()} instead).  An asterisk can also be used to multiply a
+  tensor by a scalar, as in \code{T1*5}.
+
+  An asterisk cannot be used to multiply two kforms \code{K1},
+  \code{K2}, as in \code{K1*K2}, which will always return an error.
+  This on the grounds that it has no sensible interpretation in general
+  and you probably meant to use a wedge product, \code{K1^K2}.  Note
+  that multiplication by scalars is acceptable, as in \code{K1*6}.
+  Further note that \code{K1*K2} returns an error even if one or both is
+  a 0-form (or scalar), as in \code{K1*scalar(3)}.  This behaviour may
+  change in the future.
 
   In the package the caret (\dQuote{\code{^}}) evaluates the wedge
   product; note that \code{\%^\%} is also acceptable.  Of course, if
-  \code{S} is a \code{kform} object, it is very tempting to interpret
-  \dQuote{\code{S^3}} as something like \dQuote{\code{S} to the power
-  3}.  Further, if we interpret a caret as a power, idiom such as
-  \dQuote{\code{2^S}} becomes meaningless.
+  \code{S} is a \code{kform} object, it is very tempting [but
+  inccorrect!] to interpret \dQuote{\code{S^3}} as something like
+  \dQuote{\code{S} to the power 3}. In package idiom,
+  \dQuote{\code{S^3}} is interpreted as \code{S*3 = S+S+S}.  Further, if
+  we interpret a caret as a power, idiom such as \dQuote{\code{2^S}}
+  becomes meaningless.  See also the note at \code{Ops.clifford} in the
+  \pkg{clifford} package.
 
-  But powers do not make sense for alternating forms: \code{a \%^\% a}
-  is zero identically.  Here the caret is interpreted consistently as a
-  wedge product, and if one of the factors is numeric it is interpreted
-  as a zero-form (that is, a scalar).  Thus \code{a^2 == 2^a == a+a},
-  and indeed \code{a^n==a*n}.
+  Powers simply do not make sense for alternating forms: \code{S \%^\%
+  S} is zero identically.  Here the caret is interpreted consistently as
+  a wedge product, and if one of the factors is numeric it is
+  interpreted as a zero-form (that is, a scalar).  Thus \code{S^2 == 2^S
+  == S+S}, and indeed \code{S^n==S*n}.
 
   Powers are not implemented for ktensors on the grounds that a ktensor
   to the power zero is not defined.
+
+  Note that one has to take care with order of operations, as package
+  idiom is not quite associative if we mix \code{^} with \code{*}:
+
+  \code{dx ^ (6*dy)} is perfectly acceptable, but
+
+  \code{(dx ^ 6)*dy)} will return an error, as will the unbracketed form
+  \code{dx ^ 6 * dy}.  In the second case we attempt to use an asterisk
+  to multiply two k-forms, which triggers the error.
   
 }
 \examples{
@@ -64,8 +89,8 @@ k2 <- kform_general(4,2,rnorm(6))
 E <- matrix(rnorm(8),4,2)
 as.function(k1+k2)(E)
 
-
-as.function(2*k1+3*k2)(E)-(2*as.function(k1)(E) + 3*as.function(k1)(E))
+## verify linearity, here 2*k1 + 3*k2:
+as.function(2*k1+3*k2)(E)-(2*as.function(k1)(E) + 3*as.function(k2)(E))
 ## should be small
 }
 \keyword{symbolmath}

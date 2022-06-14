@@ -1,12 +1,22 @@
 ---
 title: "Exterior calculus with R"
 author: "Robin K. S. Hankin"
-date: "`r Sys.Date()`"
+output: html_vignette
 vignette: >
   %\VignetteIndexEntry{The exterior calculus}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(rmarkdown.html_vignette.check_title = FALSE)
+library("stokes")
+set.seed(1)
+```
+
+
 
 <p style="text-align: right;">
 ![](`r system.file("help/figures/stokes.png", package = "stokes")`){width=10%}
@@ -139,7 +149,7 @@ We may verify that tensors are linear using package idiom:
 ```{r}
 way1 <- as.function(2*S-3*S1)(E)
 way2 <- 2*as.function(S)(E) -3*as.function(S1)(E)
-c(way1,way2)
+c(way1,way2,way1-way2)
 ```
 
 (that is, identical up to numerical precision).
@@ -175,7 +185,7 @@ which is applied to `E1, E2, E3`:
 f <- as.function(S)
 way1 <- r1*f(E1) + r2*f(E2)
 way2 <- f(E3)
-c(way1,way2)
+c(way1,way2,way1-way2)
 ```
 
 (that is, identical up to numerical precision).  Note that this is
@@ -187,7 +197,7 @@ E1 <- matrix(rnorm(n*k),n,k)
 E2 <- matrix(rnorm(n*k),n,k)
 way1 <- f(r1*E1+r2*E2)
 way2 <- r1*f(E1)+r2*f(E2)
-c(way1,way2)
+c(way1,way2,way1-way2)
 ```
 
 ### Cross product of general tensors
@@ -221,7 +231,7 @@ Then, for example:
 E <- matrix(rnorm(30),6,5)
 way1 <- as.function(cross(S1,S2))(E)
 way2 <- as.function(S1)(E) * as.function(S2)(E)
-c(way2,way2)
+c(way2,way2,way1-way2)
 ```
 
 (that is, identical up to numerical precision).
@@ -382,6 +392,7 @@ wish to work with $dx_3$:
 
 ```{r}
 dx3 <- as.kform(matrix(3,1,1),1)
+options(kform_symbolic_print = NULL) # revert to default print method
 dx3
 ```
 
@@ -389,7 +400,7 @@ Interpretation of the output above is not obvious (it is easier to
 understand the output from more complicated alternating forms, as in
 the next section), but for the moment observe that $dx_3$ is indeed an
 alternating form, mapping $\mathbb{R}^n$ to $\mathbb{R}$ with
-$dx_i\left(x_1,x_2,\ldots,x_n\right)=x_i$.  Thus, for example:
+$dx_3\left(x_1,x_2,\ldots,x_n\right)=x_3$.  Thus, for example:
 
 
 ```{r}
@@ -398,9 +409,8 @@ as.function(dx3)(c(14,15,16,17,18))  # idiom can deal with arbitrary vectors
 ```
 
 and we see that $dx_3$ picks out the third element of a vector.  These
-are linear: we may add and subtract these elementary forms:
-
-
+are linear in the sense that we may add and subtract these elementary
+forms:
 
 ```{r}
 dx5 <- as.kform(matrix(5,1,1),1)
@@ -410,10 +420,9 @@ as.function(dx3 + 2*dx5)(1:10)  # picks out element 3 + 2*element 5
 ## Formal definition of wedge product
 
 
-The wedge product maps two
-alternating forms to another alternating form; given
-$\omega\in\Lambda^k(V)$ and $\eta\in\Lambda^l(V)$, Spivak defines the
-wedge product $\omega\wedge\eta\in\Lambda^{k+l}(V)$ as
+The wedge product maps two alternating forms to another alternating
+form; given $\omega\in\Lambda^k(V)$ and $\eta\in\Lambda^l(V)$, Spivak
+defines the wedge product $\omega\wedge\eta\in\Lambda^{k+l}(V)$ as
 
 \[
 \omega\wedge\eta={k+l\choose k\quad l}\operatorname{Alt}(\omega\otimes\eta)
@@ -542,11 +551,11 @@ Note that the wedge product $\wedge$, although implemented in package
 idiom as `^` or `%^%`, appears in the symbolic representation as an
 ascii caret, `^`.
 
-We can alter the default print method with the `stokes_symbolic_print`
+We can alter the default print method with the `kform_symbolic_print`
 option, which uses `as.symbolic()`:
 
 ```{r}
-options(stokes_symbolic_print = TRUE)
+options(kform_symbolic_print = "d")
 K
 ```
 
@@ -555,7 +564,7 @@ forms:
 
 ```{r}
 (d(1) + d(5)) ^ (d(3)-5*d(2)) ^ d(7)
-options(stokes_symbolic_print = FALSE) # restore default
+options(kform_symbolic_print = NULL) # restore default
 ```
 
 
@@ -574,7 +583,7 @@ $\phi$ and $\mathbf{v}$ is a $k-1$-form with
 if $k>1$; we specify $\phi_\mathbf{v}=\phi(\mathbf{v})$ if $k=1$.
 Verification is straightforward:
 
-```{r}
+```{r lookatfunc}
 (o <- rform())  # a random 3-form
 V <- matrix(runif(21),ncol=3)
 LHS <- as.function(o)(V)
@@ -586,13 +595,13 @@ It is possible to iterate the contraction process; if we pass a matrix
 $V$ to `contract()` then this is interpreted as repeated contraction
 with the columns of $V$:
 
-```{r}
+```{r coerceotoafunction}
 as.function(contract(o,V[,1:2]))(V[,-(1:2),drop=FALSE])
 ```
 
 If we pass three columns to `contract()` the result is a $0$-form:
 
-```{r}
+```{r contractovlosetrue}
 contract(o,V)
 ```
 
@@ -600,11 +609,11 @@ In the above, the result is coerced to a scalar; in order to work with
 a formal $0$-form (which is represented in the package as a `spray`
 with a zero-column index matrix) we can use the `lose=FALSE` argument:
 
-```{r}
+```{r contractovlosefalse}
 contract(o,V,lose=FALSE)
 ```
 
-## Transformations
+## Transformations and pullback
 
 Suppose we are given a two-form $\omega=\sum_{i<j}a_{ij}dx_i\wedge
 dx_j$ and relationships $dx_i=\sum_rM_{ir}dy_r$, then we would have
@@ -675,12 +684,20 @@ then
 \end{array}
 \]
 
-Function `transform()` function does all this but it is slow.  I am
-not 100\% sure that there isn't a much more efficient way to do such a
-transformation.  There are a few tests in `tests/testthat`.
+Function `pullback()` function does all this:
 
+```{r usetransform}
+options(kform_symbolic_print = "dx")   # uses dx etc in print method
+pullback(dx^dy+5*dx^dz, matrix(1:9,3,3))
+options(kform_symbolic_print = NULL) # revert to default
+```
 
-```{r}
+However, it is slow and I am not 100\% sure that there isn't a much
+more efficient way to do such a transformation.  There are a few tests
+in `tests/testthat`.  Here I show that transformations may be inverted
+using matrix inverses:
+
+```{r defineoandM}
 (o <- 2 * as.kform(2) ^ as.kform(4) ^ as.kform(5))
 M <- matrix(rnorm(25),5,5)
 ```
@@ -689,23 +706,20 @@ Then we will transform according to matrix `M` and then transform
 according to the matrix inverse; the functionality works nicely with
 magrittr pipes:
 
-```{r}
-zap(o |> transform(M) |> transform(solve(M)))
+```{r transformbackandforward}
+o |> pullback(M) |> pullback(solve(M))
+```
+
+Above we see many rows with values small enough for the print method
+to print an exact zero, but not sufficiently small to be eliminated by
+the `spray` internals.  We can remove the small entries with `zap()`:
+
+```{r zapsmallroundofferrors}
+o |> pullback(M) |> pullback(solve(M)) |> zap()
 ```
 
 See how the result is equal to the original $k$-form $2dy_2\wedge
-dy_4\wedge dy_5$, except for some numerical roundoff error.  In this
-case the extra rows have values small enough for the print method to
-print an exact zero, but not sufficiently small to be eliminated by
-the `spray` internals.  The `spray` package version 1.0-8 does not
-have the capability of removing small entries (this will be available
-in 1.0-9); but in the meantime we can do this:
-
-```{r}
-as.kform(index(o),zapsmall(coeffs(o)))
-```
-
-returning us to the original value of `o`.
+dy_4\wedge dy_5$.
 
 ## Exterior derivatives
 

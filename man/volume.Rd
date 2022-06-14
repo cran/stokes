@@ -7,7 +7,7 @@
 }
 \usage{
 volume(n)
-is.volume(K)
+is.volume(K,n=dovs(K))
 }
 \arguments{
   \item{n}{Dimension of the space}
@@ -44,14 +44,24 @@ volume element.
 \references{Spivak}
 \author{Robin K. S. Hankin}
 \seealso{
-\code{\link{zeroform}},\code{\link{as.1form}}}
+  \code{\link{zeroform}},\code{\link{as.1form}},\code{\link{dovs}}
+}
 \examples{
 
-as.kform(1) ^ as.kform(2) ^ as.kform(3)  == volume(3)  # should be TRUE
+
+dx^dy^dz == volume(3) 
+
+p <- 1
+for(i in 1:7){p <- p ^ as.kform(i)}
+p
+p == volume(7)  # should be TRUE
 
 o <- volume(5)
 M <- matrix(runif(25),5,5)
 det(M) - as.function(o)(M)   # should be zero
 
+
+is.volume(d(1) ^ d(2) ^ d(3) ^ d(4))
+is.volume(d(1:9))
 
 }

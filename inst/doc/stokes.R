@@ -1,3 +1,9 @@
+## ----setup, include=FALSE-----------------------------------------------------
+knitr::opts_chunk$set(echo = TRUE)
+options(rmarkdown.html_vignette.check_title = FALSE)
+library("stokes")
+set.seed(1)
+
 ## ----message=FALSE------------------------------------------------------------
 library("stokes")
 
@@ -24,7 +30,7 @@ S1 <- as.ktensor(1+diag(4),1:4)
 ## -----------------------------------------------------------------------------
 way1 <- as.function(2*S-3*S1)(E)
 way2 <- 2*as.function(S)(E) -3*as.function(S1)(E)
-c(way1,way2)
+c(way1,way2,way1-way2)
 
 ## -----------------------------------------------------------------------------
 
@@ -45,14 +51,14 @@ E3[,2] <- r1*x1 + r2*x2
 f <- as.function(S)
 way1 <- r1*f(E1) + r2*f(E2)
 way2 <- f(E3)
-c(way1,way2)
+c(way1,way2,way1-way2)
 
 ## -----------------------------------------------------------------------------
 E1 <- matrix(rnorm(n*k),n,k)
 E2 <- matrix(rnorm(n*k),n,k)
 way1 <- f(r1*E1+r2*E2)
 way2 <- r1*f(E1)+r2*f(E2)
-c(way1,way2)
+c(way1,way2,way1-way2)
 
 ## -----------------------------------------------------------------------------
 (S1 <- ktensor(spray(cbind(1:3,2:4),1:3)))
@@ -65,7 +71,7 @@ cross(S1,S2)
 E <- matrix(rnorm(30),6,5)
 way1 <- as.function(cross(S1,S2))(E)
 way2 <- as.function(S1)(E) * as.function(S2)(E)
-c(way2,way2)
+c(way2,way2,way1-way2)
 
 ## -----------------------------------------------------------------------------
 S1
@@ -84,6 +90,7 @@ K
 
 ## -----------------------------------------------------------------------------
 dx3 <- as.kform(matrix(3,1,1),1)
+options(kform_symbolic_print = NULL) # revert to default print method
 dx3
 
 ## -----------------------------------------------------------------------------
@@ -139,38 +146,43 @@ K
 as.symbolic(K,d="d",symbols=letters[23:26])
 
 ## -----------------------------------------------------------------------------
-options(stokes_symbolic_print = TRUE)
+options(kform_symbolic_print = "d")
 K
 
 ## -----------------------------------------------------------------------------
 (d(1) + d(5)) ^ (d(3)-5*d(2)) ^ d(7)
-options(stokes_symbolic_print = FALSE) # restore default
+options(kform_symbolic_print = NULL) # restore default
 
-## -----------------------------------------------------------------------------
+## ----lookatfunc---------------------------------------------------------------
 (o <- rform())  # a random 3-form
 V <- matrix(runif(21),ncol=3)
 LHS <- as.function(o)(V)
 RHS <- as.function(contract(o,V[,1]))(V[,-1])
 c(LHS=LHS,RHS=RHS,diff=LHS-RHS)
 
-## -----------------------------------------------------------------------------
+## ----coerceotoafunction-------------------------------------------------------
 as.function(contract(o,V[,1:2]))(V[,-(1:2),drop=FALSE])
 
-## -----------------------------------------------------------------------------
+## ----contractovlosetrue-------------------------------------------------------
 contract(o,V)
 
-## -----------------------------------------------------------------------------
+## ----contractovlosefalse------------------------------------------------------
 contract(o,V,lose=FALSE)
 
-## -----------------------------------------------------------------------------
+## ----usetransform-------------------------------------------------------------
+options(kform_symbolic_print = "dx")   # uses dx etc in print method
+pullback(dx^dy+5*dx^dz, matrix(1:9,3,3))
+options(kform_symbolic_print = NULL) # revert to default
+
+## ----defineoandM--------------------------------------------------------------
 (o <- 2 * as.kform(2) ^ as.kform(4) ^ as.kform(5))
 M <- matrix(rnorm(25),5,5)
 
-## -----------------------------------------------------------------------------
-zap(o |> transform(M) |> transform(solve(M)))
+## ----transformbackandforward--------------------------------------------------
+o |> pullback(M) |> pullback(solve(M))
 
-## -----------------------------------------------------------------------------
-as.kform(index(o),zapsmall(coeffs(o)))
+## ----zapsmallroundofferrors---------------------------------------------------
+o |> pullback(M) |> pullback(solve(M)) |> zap()
 
 ## -----------------------------------------------------------------------------
 grad(c(0.4,0.1,-3.2,1.5))

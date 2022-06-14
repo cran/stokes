@@ -133,7 +133,7 @@
     return(zeroform(arity(K1)+arity(K2)))
     }
 
-  kform(spraycross(K1,K2))
+  kform(spraycross(K1,K2)) # the meat
 }
 
 `%^%` <- function(x,y){wedge(x,y)}
@@ -182,9 +182,11 @@
     })
 }
 
-`rform` <- function(terms=9, k=3, n=7, coeffs){
+`rform` <- function(terms=9, k=3, n=7, coeffs, ensure=TRUE){
   if(missing(coeffs)){coeffs <- seq_len(terms)}
-  kform(spray(t(replicate(terms,sample(seq_len(n),k))),seq_len(terms),addrepeats=TRUE))
+  ind <- t(replicate(terms,sample(seq_len(n),k)))
+  if(ensure & all(ind)<n){ind[sample(which(ind==max(ind)),1)] <- n}
+  kform(spray(ind,coeffs,addrepeats=TRUE))
 }
 
 `rtensor` <- function(terms=9,k=3, n=7, coeffs){
@@ -233,49 +235,52 @@
   return(noquote(out))
 }
 
-`hodge` <- function(K, n=max(index(K)), g=rep(1,n), lose=TRUE){
-  if(is.empty(K)){
-    if(missing(n)){
-      stop("K is zero but no value of n is supplied")
-    } else {
-      return(kform(spray(matrix(1,0,n-arity(K)),1)))
-    }
-  } else if(is.volume(K)){
-    return(scalar(coeffs(K),lose=lose))
-  } else if(is.scalar(K)){
-    if(missing(n)){
-      stop("K is scalar but no value of n is supplied")
-    } else {
-      return(volume(n)*coeffs(K))
-    }
-  } # weird edge-cases end
-        
+`hodge` <- function(K, n=dovs(K), g, lose=TRUE){
+    if(missing(g)){g <- rep(1,n)}
+
+    if(is.empty(K)){
+        if(missing(n)){
+            stop("'K' is zero but no value of 'n' is supplied")
+        } else {
+            return(kform(spray(matrix(1,0,n-arity(K)),1)))
+        }
+    } else if(is.volume(K,n)){
+        return(scalar(coeffs(K),lose=lose))
+    } else if(is.scalar(K)){
+        if(missing(n)){
+            stop("'K' is scalar but no value of 'n' is supplied")
+        } else {
+            return(volume(n)*coeffs(K))
+        }
+    } # weird edge-cases end
     
-  stopifnot(n >= max(index(K)))
-
-  iK <- index(K)
-  f1 <- function(o){seq_len(n)[!seq_len(n) %in% o]}
-  f2 <- function(x){permutations::sgn(permutations::as.word(x))}
-  f3 <- function(v){prod(g[v])}
-  jj <- apply(iK,1,f1)
-  if(is.matrix(jj)){
-    newindex <- t(jj)
-  } else {
-    newindex <- as.matrix(jj)
-  }
-  iK <- cbind(iK,newindex)
-  x1 <- apply(iK,1,f2)
-  x2 <- apply(iK,1,f3)
-  x3 <- elements(coeffs(K))
-
-  as.kform(newindex,x1*x2*x3)
+    
+    stopifnot(n >= dovs(K))
+    
+    f1 <- function(o){seq_len(n)[!seq_len(n) %in% o]}
+    f2 <- function(x){permutations::sgn(permutations::as.word(x))}
+    f3 <- function(v){prod(g[v])}
+    
+    iK <- index(K)
+    jj <- apply(iK,1,f1)
+    if(is.matrix(jj)){
+        newindex <- t(jj)
+    } else {
+        newindex <- as.matrix(jj)
+    }
+    
+    x_coeffs <- elements(coeffs(K))
+    x_metric <- apply(iK,1,f3)
+    x_sign <- apply(cbind(iK,newindex),1,f2)  # get the sign 
+    
+    as.kform(newindex,x_metric*x_coeffs*x_sign)
 }
 
 `inner` <- function(M){
     ktensor(spray(expand.grid(seq_len(nrow(M)),seq_len(ncol(M))),c(M)))
 }
 
-`transform` <- function(K,M)
+`pullback` <- function(K,M)
 {
     if(is.zero(K)){return(K)}
     Reduce(`+`,sapply(seq_along(coeffs(K)),
@@ -308,13 +313,13 @@
 }
   
 `keep` <- function(K,yes){
-    jj <- rep(0L,max(index(K)))
+    jj <- rep(0L,dovs(K))
     jj[yes] <- 1
     stretch(K,jj)
 }
 
 `discard` <- function(K,no){
-    jj <- rep(1L,max(index(K)))
+    jj <- rep(1L,dovs(K))
     jj[no] <- 0L
     stretch(K,jj)
 }
@@ -365,11 +370,12 @@
 
 `volume` <- function(n){as.kform(seq_len(n))}
 
-`is.volume` <- function(K){
+`is.volume` <- function(K,n=dovs(K)){
   return(
   (nterms(K) == 1)      &&
   (nrow(index(K)) == 1) &&
   (arity(K) > 0)        &&
+  n == dovs(K)    && 
   all(seq_len(arity(K)) == index(K))
   )
 }
@@ -423,3 +429,35 @@ setGeneric("lose",function(x){standardGeneric("lose")})
     }
     return(ktensor(spray(index(S),elements(jj))))
 }
+
+`vector_cross_product` <- function(M){
+    n <- nrow(M)
+    stopifnot(n==ncol(M)+1)
+    (-1)^n*sapply(seq_len(n),function(i){(-1)^i*det(M[-i,])})
+}
+
+`kinner` <- function(o1,o2,M){
+    stopifnot(arity(o1) == arity(o2))
+    k <- arity(o1)
+    if(missing(M)){M <- diag(nrow=max(c(index(o1),index(o2))))}
+
+    out <- 0
+    
+    k <- arity(o1)
+    c1 <- elements(coeffs(o1))
+    c2 <- elements(coeffs(o2))
+    for(no1 in seq_len(nterms(o1))){
+        for(no2 in seq_len(nterms(o2))){
+            MM <- matrix(0,k,k)
+            for(i in seq_len(k)){
+                for(j in seq_len(k)){
+                    MM[i,j] <- MM[i,j] + M[index(o1)[no1,i], index(o2)[no2,j]]
+                }
+            }
+            out <- out + det(MM)*c1[no1]*c2[no2]
+        } # o2 terms loop closes
+    } # o1 terms loop closes
+    return(out)
+}
+
+`dovs` <- function(K){max(index(K))}

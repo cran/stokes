@@ -57,7 +57,10 @@ d(i)
     that span the space of alternating tensors.
     \item\code{is.kform()} returns \code{TRUE} if its argument is a
     \code{kform} object.
-    \item{\code{d()}} is an easily-typed synonym for \code{as.kform()}
+    \item{\code{d()}} is an easily-typed synonym for
+    \code{as.kform()}.  The idea is that \code{d(1) = dx},
+    \code{d(2)=dy}, \code{d(5)=dx^5}, etc.  Also note that, for
+    example, \code{d(1:3)=dx^dy^dz}, the volume form.
   }
   
   Recall that a \mjseqn{k}-tensor is a multilinear map from \mjseqn{V^k} to
@@ -65,7 +68,7 @@ d(i)
   \mjseqn{k}-tensor \mjseqn{T} is \dfn{alternating} if it satisfies
 
   \mjdeqn{T\left(v_1,\ldots,v_i,\ldots,v_j,\ldots,v_k\right)=
-    T\left(v_1,\ldots,v_j,\ldots,v_i,\ldots,v_k\right)
+    -T\left(v_1,\ldots,v_j,\ldots,v_i,\ldots,v_k\right)
   }{omitted; see latex}
   
   In the package, an object of class \code{kform} is an efficient
@@ -84,7 +87,6 @@ d(i)
   
   where \mjeqn{\mathbf{e}_j,1\leq j\leq k}{e_j,1<=j<=k} is a basis for
   \mjseqn{V}.
-  
   
 }
 \value{
@@ -108,13 +110,17 @@ K1 <- as.kform(cbind(1:5,2:6),rnorm(5))
 K2 <- kform_general(5:8,2,1:6)
 K1^K2  # or wedge(K1,K2)
 
+d(1:3)
+dx^dy^dz   # same thing
+
+d(sample(9)) # coeff is +/-1 depending on even/odd permutation of 1:9
 
 f <- as.function(wedge(K1,K2))
 E <- matrix(rnorm(32),8,4)
 f(E) + f(E[,c(1,3,2,4)])  # should be zero by alternating property
 
-options(stokes_symbolic_print = TRUE)
+options(kform_symbolic_print = 'd')
 (d(5)+d(7)) ^ (d(2)^d(5) + 6*d(4)^d(7))
-options(stokes_symbolic_print = FALSE)
+options(kform_symbolic_print = NULL)  # revert to default
 
 }

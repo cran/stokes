@@ -10,7 +10,7 @@
   Given a \mjseqn{k}-form, express it in terms of linear
   combinations of the \mjeqn{dx_i}{dx_i}}
 \usage{
-transform(K,M)
+pullback(K,M)
 stretch(K,d)
 }
 \arguments{
@@ -20,6 +20,11 @@ stretch(K,d)
     diagonal matrix}
 }
 \details{
+
+  Function \code{pullback()} calculates the pullback of a function.  A
+  vignette is provided at \file{pullback.Rmd}.
+
+
   Suppose we are given a two-form
 
   \mjdeqn{
@@ -71,23 +76,23 @@ a diagonal matrix.  It is much faster than \code{transform()}.
 # Example in the text:
 K <- as.kform(matrix(c(1,1,2,3),2,2),c(1,5))
 M <- matrix(1:9,3,3)
-transform(K,M)
+pullback(K,M)
 
 # Demonstrate that the result can be complicated:
 M <- matrix(rnorm(25),5,5)
-transform(as.kform(1:2),M)
+pullback(as.kform(1:2),M)
 
 # Numerical verification:
 o <- rform(terms=2,n=5)
 
-o2 <- transform(transform(o,M),solve(M))
+o2 <- pullback(pullback(o,M),solve(M))
 max(abs(coeffs(o-o2))) # zero to numerical precision
 
 # Following should be zero:
-transform(as.kform(1),M)-as.kform(matrix(1:5),c(crossprod(M,c(1,rep(0,4)))))
+pullback(as.kform(1),M)-as.kform(matrix(1:5),c(crossprod(M,c(1,rep(0,4)))))
 
 # Following should be TRUE:
-issmall(transform(o,crossprod(matrix(rnorm(10),2,5))))
+issmall(pullback(o,crossprod(matrix(rnorm(10),2,5))))
 
 # Some stretch() use-cases:
 

@@ -1,7 +1,7 @@
 ---
 title: "`wedge()` and related functions in the `stokes` package"
 author: "Robin K. S. Hankin"
-output: html_document
+output: html_vignette
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteIndexEntry{wedge}
@@ -23,6 +23,8 @@ set.seed(0)
 wedge
 wedge2
 ```
+
+[the meat of `wedge2()` is `kform(spraycross(K1, K2))`].
 
 Function `wedge()` returns the wedge product of any number of kforms,
 function `wedge2()` returns the wedge product of two kforms.  Spivak
@@ -50,7 +52,7 @@ spraycross(a,b)
 spraycross(b,a)
 ```
 
-Observe that `spraycross()` (and by association `wedge()`)is
+Observe that `spraycross()` (and by association `wedge()`) is
 associative and distributive but not commutative.
 
 ### Cut to the chase: `wedge2()`
