@@ -1,5 +1,6 @@
 exportPattern("^[[:alpha:]]+")
-
+export("0form")
+export("0tensor")
 export("%^%")
 export("%X%")
 
@@ -36,3 +37,8 @@ S3method("print",ktensor)
 
 S3method("coeffs<-",kform)
 S3method("coeffs<-",ktensor)
+
+S3method("summary",kform)
+S3method("print",summary.kform)
+S3method("summary",ktensor)
+S3method("print",summary.ktensor)

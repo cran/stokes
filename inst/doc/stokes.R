@@ -28,9 +28,9 @@ S1 <- as.ktensor(1+diag(4),1:4)
 2*S-3*S1
 
 ## -----------------------------------------------------------------------------
-way1 <- as.function(2*S-3*S1)(E)
-way2 <- 2*as.function(S)(E) -3*as.function(S1)(E)
-c(way1,way2,way1-way2)
+LHS <- as.function(2*S-3*S1)(E)
+RHS <- 2*as.function(S)(E) -3*as.function(S1)(E)
+c(lhs=LHS,rhs=RHS,diff=LHS-RHS)
 
 ## -----------------------------------------------------------------------------
 
@@ -49,29 +49,29 @@ E3[,2] <- r1*x1 + r2*x2
 
 ## -----------------------------------------------------------------------------
 f <- as.function(S)
-way1 <- r1*f(E1) + r2*f(E2)
-way2 <- f(E3)
-c(way1,way2,way1-way2)
+LHS <- r1*f(E1) + r2*f(E2)
+RHS <- f(E3)
+c(lhs=LHS,rhs=RHS,diff=LHS-RHS)
 
 ## -----------------------------------------------------------------------------
 E1 <- matrix(rnorm(n*k),n,k)
 E2 <- matrix(rnorm(n*k),n,k)
-way1 <- f(r1*E1+r2*E2)
-way2 <- r1*f(E1)+r2*f(E2)
-c(way1,way2,way1-way2)
+LHS <- f(r1*E1+r2*E2)
+RHS <- r1*f(E1)+r2*f(E2)
+c(lhs=LHS,rhs=RHS,diff=LHS-RHS)
 
 ## -----------------------------------------------------------------------------
 (S1 <- ktensor(spray(cbind(1:3,2:4),1:3)))
 (S2 <- as.ktensor(matrix(1:6,2,3)))
 
 ## -----------------------------------------------------------------------------
-cross(S1,S2)
+tensorprod(S1,S2)
 
 ## -----------------------------------------------------------------------------
 E <- matrix(rnorm(30),6,5)
-way1 <- as.function(cross(S1,S2))(E)
-way2 <- as.function(S1)(E) * as.function(S2)(E)
-c(way2,way2,way1-way2)
+LHS <- as.function(tensorprod(S1,S2))(E)
+RHS <- as.function(S1)(E[,1:2]) * as.function(S2)(E[,3:5])
+c(lhs=LHS,rhs=RHS,diff=LHS-RHS)
 
 ## -----------------------------------------------------------------------------
 S1

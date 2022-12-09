@@ -100,10 +100,15 @@ c(is.zero(a1-a2),is.zero(a1-a3),is.zero(a2-a3))
 
 ## -----------------------------------------------------------------------------
 (rand_tensor <- rtensor(k=5,n=9)*120)
-S1 <- Alt(rand_tensor)  # 720 terms, too long to print
+S1 <- Alt(rand_tensor)  # 120 terms, too long to print all of it
+summary(S1)
+
+## -----------------------------------------------------------------------------
 (SA1 <- Alt(rand_tensor,give_kform=TRUE))
 
 ## -----------------------------------------------------------------------------
 V <- matrix(rnorm(45),ncol=5)
-c(as.function(S1)(V),as.function(SA1)(V)) # should match
+LHS <- as.function(S1)(V)
+RHS <- as.function(SA1)(V)
+c(LHS=LHS,RHS=RHS,diff=LHS-RHS)
 

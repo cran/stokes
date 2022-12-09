@@ -15,7 +15,7 @@ coverage](https://codecov.io/gh/RobinHankin/stokes/branch/master/graph/badge.svg
 # Overview
 
 The `stokes` package provides functionality for working with the
-exterior calculus. It includes cross products and wedge products and a
+exterior calculus. It includes tensor products and wedge products and a
 variety of use-cases. The canonical reference would be Spivak (see
 references). A detailed vignette is provided in the package.
 
@@ -24,28 +24,28 @@ The package deals with
 ![k](https://latex.codecogs.com/png.latex?k "k")-forms. A
 ![k](https://latex.codecogs.com/png.latex?k "k")-tensor is a multilinear
 map
-![S\\colon V^k\\longrightarrow\\mathbb{R}](https://latex.codecogs.com/png.latex?S%5Ccolon%20V%5Ek%5Clongrightarrow%5Cmathbb%7BR%7D "S\colon V^k\longrightarrow\mathbb{R}"),
+![S\colon V^k\longrightarrow\mathbb{R}](https://latex.codecogs.com/png.latex?S%5Ccolon%20V%5Ek%5Clongrightarrow%5Cmathbb%7BR%7D "S\colon V^k\longrightarrow\mathbb{R}"),
 where
-![V=\\mathbb{R}^n](https://latex.codecogs.com/png.latex?V%3D%5Cmathbb%7BR%7D%5En "V=\mathbb{R}^n")
+![V=\mathbb{R}^n](https://latex.codecogs.com/png.latex?V%3D%5Cmathbb%7BR%7D%5En "V=\mathbb{R}^n")
 is considered as a vector space. Given two
 ![k](https://latex.codecogs.com/png.latex?k "k")-tensors
 ![S,T](https://latex.codecogs.com/png.latex?S%2CT "S,T") the package can
 calculate their outer product
-![S\\otimes T](https://latex.codecogs.com/png.latex?S%5Cotimes%20T "S\otimes T")
+![S\otimes T](https://latex.codecogs.com/png.latex?S%5Cotimes%20T "S\otimes T")
 using natural R idiom (see below and the vignette for details).
 
 A ![k](https://latex.codecogs.com/png.latex?k "k")-form is an
 alternating ![k](https://latex.codecogs.com/png.latex?k "k")-tensor,
 that is a ![k](https://latex.codecogs.com/png.latex?k "k")-tensor
-![\\omega](https://latex.codecogs.com/png.latex?%5Comega "\omega") with
+![\omega](https://latex.codecogs.com/png.latex?%5Comega "\omega") with
 the property that linear dependence of
-![x_1,\\ldots,x_n](https://latex.codecogs.com/png.latex?x_1%2C%5Cldots%2Cx_n "x_1,\ldots,x_n")
+![x_1,\ldots,x_n](https://latex.codecogs.com/png.latex?x_1%2C%5Cldots%2Cx_n "x_1,\ldots,x_n")
 implies that
-![\\omega\\left(x_1,\\ldots,x_n\\right)=0](https://latex.codecogs.com/png.latex?%5Comega%5Cleft%28x_1%2C%5Cldots%2Cx_n%5Cright%29%3D0 "\omega\left(x_1,\ldots,x_n\right)=0").
+![\omega\left(x_1,\ldots,x_n\right)=0](https://latex.codecogs.com/png.latex?%5Comega%5Cleft%28x_1%2C%5Cldots%2Cx_n%5Cright%29%3D0 "\omega\left(x_1,\ldots,x_n\right)=0").
 Given ![k](https://latex.codecogs.com/png.latex?k "k")-forms
-![\\omega,\\eta](https://latex.codecogs.com/png.latex?%5Comega%2C%5Ceta "\omega,\eta"),
+![\omega,\eta](https://latex.codecogs.com/png.latex?%5Comega%2C%5Ceta "\omega,\eta"),
 the package provides R idiom for calculating their wedge product
-![\\omega\\wedge\\eta](https://latex.codecogs.com/png.latex?%5Comega%5Cwedge%5Ceta "\omega\wedge\eta").
+![\omega\wedge\eta](https://latex.codecogs.com/png.latex?%5Comega%5Cwedge%5Ceta "\omega\wedge\eta").
 
 # Installation
 
@@ -76,7 +76,7 @@ jj
 ```
 
 Above, object `jj` is equal to
-![dx_1\\otimes dx_2\\otimes dx_3 + 2dx_2\\otimes dx_3\\otimes dx_4](https://latex.codecogs.com/png.latex?dx_1%5Cotimes%20dx_2%5Cotimes%20dx_3%20%2B%202dx_2%5Cotimes%20dx_3%5Cotimes%20dx_4 "dx_1\otimes dx_2\otimes dx_3 + 2dx_2\otimes dx_3\otimes dx_4")
+![dx_1\otimes dx_2\otimes dx_3 + 2dx_2\otimes dx_3\otimes dx_4](https://latex.codecogs.com/png.latex?dx_1%5Cotimes%20dx_2%5Cotimes%20dx_3%20%2B%202dx_2%5Cotimes%20dx_3%5Cotimes%20dx_4 "dx_1\otimes dx_2\otimes dx_3 + 2dx_2\otimes dx_3\otimes dx_4")
 (see Spivak, p76 for details).
 
 We can coerce tensors to a function and then evaluate it:
@@ -89,7 +89,7 @@ f(E)
 #> [1] 11.23556
 ```
 
-Cross products are implemented:
+Tensor products are implemented:
 
 ``` r
 KT %X% KT
@@ -114,7 +114,7 @@ KT %X% KT
 ```
 
 Above we see
-![{\\mathrm KT}\\otimes{\\mathrm KT}](https://latex.codecogs.com/png.latex?%7B%5Cmathrm%20KT%7D%5Cotimes%7B%5Cmathrm%20KT%7D "{\mathrm KT}\otimes{\mathrm KT}").
+![{\mathrm KT}\otimes{\mathrm KT}](https://latex.codecogs.com/png.latex?%7B%5Cmathrm%20KT%7D%5Cotimes%7B%5Cmathrm%20KT%7D "{\mathrm KT}\otimes{\mathrm KT}").
 
 ## Alternating forms
 
@@ -145,6 +145,7 @@ class `kform`. Such objects may be created using the `as.kform()`
 function:
 
 ``` r
+
 M <- matrix(c(4,2,3,1,2,4),2,3,byrow=TRUE)
 M
 #>      [,1] [,2] [,3]
@@ -159,7 +160,7 @@ KF
 ```
 
 Above, we see that `KF` is equal to
-![dx_2\\wedge dx_3\\wedge dx_4 + 5dx_1\\wedge dx_2\\wedge dx_4](https://latex.codecogs.com/png.latex?dx_2%5Cwedge%20dx_3%5Cwedge%20dx_4%20%2B%205dx_1%5Cwedge%20dx_2%5Cwedge%20dx_4 "dx_2\wedge dx_3\wedge dx_4 + 5dx_1\wedge dx_2\wedge dx_4").
+![dx_2\wedge dx_3\wedge dx_4 + 5dx_1\wedge dx_2\wedge dx_4](https://latex.codecogs.com/png.latex?dx_2%5Cwedge%20dx_3%5Cwedge%20dx_4%20%2B%205dx_1%5Cwedge%20dx_2%5Cwedge%20dx_4 "dx_2\wedge dx_3\wedge dx_4 + 5dx_1\wedge dx_2\wedge dx_4").
 We may coerce `KF` to functional form:
 
 ``` r
@@ -170,9 +171,9 @@ f(E)
 ```
 
 Above, we evaluate `KF` at a point in
-![\\left({\\mathbb R^4}\\right)^3](https://latex.codecogs.com/png.latex?%5Cleft%28%7B%5Cmathbb%20R%5E4%7D%5Cright%29%5E3 "\left({\mathbb R^4}\right)^3")
+![\left({\mathbb R^4}\right)^3](https://latex.codecogs.com/png.latex?%5Cleft%28%7B%5Cmathbb%20R%5E4%7D%5Cright%29%5E3 "\left({\mathbb R^4}\right)^3")
 \[the three columns of matrix `E` are each interpreted as vectors in
-![{\\mathbb R}^4](https://latex.codecogs.com/png.latex?%7B%5Cmathbb%20R%7D%5E4 "{\mathbb R}^4")\].
+![{\mathbb R}^4](https://latex.codecogs.com/png.latex?%7B%5Cmathbb%20R%7D%5E4 "{\mathbb R}^4")\].
 
 # The wedge product
 

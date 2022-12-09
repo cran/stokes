@@ -99,22 +99,22 @@
     ktensor(include_perms(consolidate(out))/factorial(ncol(index(out))))
 }
 
-`cross` <- function(U, ...) {
+`tensorprod` <- function(U, ...) {
    if(nargs()<3){
-     cross2(U, ...)
+     tensorprod2(U, ...)
    } else {
-     cross2(U, Recall(...))
+     tensorprod2(U, Recall(...))
    }
 }
 
-`cross2` <- function(U1,U2){  # returns U1\otimes U2
+`tensorprod2` <- function(U1,U2){  # returns U1\otimes U2
     if(is.empty(U1) | is.empty(U2)){
       return(as.ktensor(cbind(index(U1)[0,],index(U2)[0,])))
     }
     return(ktensor(spraycross(U1,U2)))
 }
 
-`%X%` <- function(x,y){cross(x,y)}
+`%X%` <- function(x,y){tensorprod2(x,y)}
 
 `wedge` <- function(x, ...) {
    if(nargs()<3){
@@ -349,24 +349,30 @@
     return(disordR::drop(out))
 }
 
-`scalar` <- function(s,lose=FALSE){
+`scalar` <- function(s,kform=TRUE,lose=FALSE){
     if(lose){
         stopifnot(length(s)==1)
         return(s)
     } else {
-        return(s*kform(spray(matrix(1,1,0))))
+        if(kform){
+            return(s*kform(spray(matrix(1,1,0))))
+        } else {
+            return(s*ktensor(spray(matrix(1,1,0))))
+        }
     }
 }
     
-`0form` <- `scalar`
+`0form` <- function(s=1,lose=FALSE){scalar(s,kform=TRUE,lose=lose)}
+`0tensor` <- function(s=1,lose=FALSE){scalar(s,kform=FALSE,lose=lose)}
 
 `is.scalar` <- function(M){
   return(
-  ((length(M)==1) & is.numeric(M)) ||
-  (is.kform(M) & all(dim(index(M))==c(1,0)))
+      is.zero(M)                                   || 
+      ((length(M)==1) & is.numeric(M))             || 
+      (is.kform(M)   & all(dim(index(M))==c(1,0))) || 
+      (is.ktensor(M) & all(dim(index(M))==c(1,0)))
   )
 }
-
 
 `volume` <- function(n){as.kform(seq_len(n))}
 
@@ -460,4 +466,43 @@ setGeneric("lose",function(x){standardGeneric("lose")})
     return(out)
 }
 
-`dovs` <- function(K){max(index(K))}
+`dovs` <- function(K){
+    if(is.zero(K) || is.scalar(K)){
+        return(0)
+    } else {
+        return(max(index(K)))
+    }
+}
+
+
+`summary.kform` <- function(object, ...){
+  class(object) <- "spray"
+  out <- spray::summary(object)
+  out[[3]] <- nterms(object)
+  class(out) <- "summary.kform"
+  return(out)
+}
+
+`summary.ktensor` <- function(object, ...){
+  class(object) <- "spray"
+  out <- spray::summary(object)
+  out[[3]] <- nterms(object)
+  class(out) <- "summary.ktensor"
+  return(out)
+}
+
+`print.summary.kform` <- function(x,...){
+  cat(paste("A kform object with ", x[[3]], " terms.  Summary of coefficients: \n\n",sep=""))
+  print(x[[1]])
+  cat("\n\nRepresentative selection of index and coefficients:\n\n")
+  print(kform(x[[2]]))
+}
+
+`print.summary.ktensor` <- function(x,...){
+  cat(paste("A ktensor object with ", x[[3]], " terms.  Summary of coefficients: \n\n",sep=""))
+  print(x[[1]])
+  cat("\n\nRepresentative selection of index and coefficients:\n\n")
+  print(ktensor(x[[2]]))
+}
+
+setGeneric("sort")

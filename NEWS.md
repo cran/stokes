@@ -15,3 +15,18 @@
 - vector_cross_product() implemented
 - new vignette
 
+# stokes 1.1-3
+
+- bugfix
+- more vignettes
+
+# stokes 1.1-4
+
+- New function `0tensor()`
+
+# stokes 1.1-6
+
+- Improvements to summary print methods
+- citation points to arXiv preprint
+- tweaks to vignettes
+- remove overlooked dependence on pracma

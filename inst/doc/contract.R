@@ -73,5 +73,5 @@ o <- as.kform(1:5)
 V <- matrix(rnorm(25),5,5)
 LHS <- det(V)
 RHS <- contract(o,V)
-c(LHS,RHS,LHS-RHS)
+c(LHS=LHS,RHS=RHS,diff=LHS-RHS)
 

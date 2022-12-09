@@ -3,6 +3,8 @@
 \alias{print.kform}
 \alias{print.ktensor}
 \alias{stokes_symbolic_print}
+\alias{kform_symbolic_print}
+\alias{ktensor_symbolic_print}
 \alias{polyform}
 \title{Print methods for \eqn{k}-tensors and \eqn{k}-forms}
 \description{\loadmathjax
@@ -28,16 +30,17 @@ or multivariate polynomial form
 \author{Robin K. S. Hankin}
 \note{
 
-  The print method asserts that its argument is a map from
-  \mjseqn{V^k} to \mjseqn{R} with \mjseqn{V=R^n}.  Here, \mjseqn{n} is
-  the largest element in the index matrix.  However, such a map
-  naturally furnishes a map from \mjseqn{(R^m)^k} to \mjseqn{R}
-  provided that \mjeqn{m\geq n}{m>=n} via the natural projection from
-  \mjseqn{R^n} to \mjseqn{R^m}.  Formally this would be
+  The print method asserts that its argument is a map from \mjseqn{V^k}
+  to \mjseqn{R} with \mjseqn{V=R^n}.  Here, \mjseqn{n} is the largest
+  element in the index matrix.  However, such a map naturally furnishes
+  a map from \mjseqn{(R^m)^k} to \mjseqn{R} provided that \mjeqn{m\geq
+  n}{m>=n} via the natural projection from \mjseqn{R^n} to \mjseqn{R^m}.
+  Formally this would be
   \mjeqn{\left(x_1,\ldots,x_n\right)\mapsto\left(x_1,\ldots,x_n,0,\ldots,0\right)\in
   R^m}{equation omitted}.  In the case of the zero \mjseqn{k}-form or
   \mjseqn{k}-tensor, \dQuote{\code{n}} is to be interpreted as
-  \dQuote{any \mjeqn{n\geq 0}{n>=0}}.
+  \dQuote{any \mjeqn{n\geq 0}{n>=0}}.  See also \code{dovs()}.
+  
 
   By default, the print method uses the \pkg{spray} print methods, and
   as such respects the \code{polyform} option.  However, setting
@@ -49,27 +52,41 @@ or multivariate polynomial form
   It is much better to use options \code{ktensor_symbolic_print} or
   \code{kform_symbolic_print} instead.  If these options are non-null,
   the print method uses \code{as.symbolic()} to give an alternate way of
-  displaying \mjseqn{k}-tensors and \mjseqn{k}-forms.  Set
+  displaying \mjseqn{k}-tensors and \mjseqn{k}-forms.  The generic
+  non-null value would be \dQuote{\code{x}} which gives output like
+  \dQuote{\code{dx1 ^ dx2}}.  However, it has two special values: set
   \code{kform_symbolic_print} to \dQuote{\code{dx}} for output like
   \dQuote{\code{dx ^ dz}} and \dQuote{\code{txyz}} for output like
   \dQuote{\code{dt ^ dx}}, useful in relativistic physics with a
-  Minkowski metric.  More detail is given at \code{symbolic.Rd} and the
+  Minkowski metric.  See the examples.
+
+  More detail is given at \code{symbolic.Rd} and the
   \code{dx} vignette.
 
 }
-\seealso{\code{\link{as.symbolic}}}
+\seealso{\code{\link{as.symbolic}},\code{\link{dovs}}}
 \examples{
 
-rform()
-rtensor()
+a <- rform()
+a
 
-## spray print options work:
-options(polyform = TRUE)
-rtensor()
+options(kform_symbolic_print = "x")
+a
 
 
-## reset to default 
-options(polyform = FALSE)
+options(kform_symbolic_print = "dx")
+kform(spray(kform_basis(3,2),1:3))
+
+
+kform(spray(kform_basis(4,2),1:6))  # runs out of symbols
+
+
+options(kform_symbolic_print = "txyz")
+kform(spray(kform_basis(4,2),1:6))  # standard notation
+
+
+options(kform_symbolic_print = NULL) # revert to default
+a
 
 }
 

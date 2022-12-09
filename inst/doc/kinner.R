@@ -35,3 +35,6 @@ outer(p,p,Vectorize(function(i,j){kinner(do(i),do(j),M=mink)}))
 ## ----removedtdxdydz-----------------------------------------------------------
 rm(dt,dx,dy,dz)
 
+## ----reset_default_print_method, include=FALSE--------------------------------
+options(kform_symbolic_print = NULL)
+

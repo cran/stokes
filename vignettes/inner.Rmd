@@ -24,14 +24,37 @@ set.seed(0)
 inner
 ```
 
-Function `inner()` returns the inner product corresponding to a
-matrix.
+Spivak, in a memorable passage, states:
 
-The inner product of two vectors $\mathbf{x}$ and $\mathbf{y}$ is
-usually written $\left\langle\mathbf{x},\mathbf{y}\right\rangle$ or
+<div class="warning" style='padding:0.1em; background-color:#E9D8FD; color:#69337A'>
+<span>
+<p>
+
+The reader is already familiar with certain tensors, aside from
+members of $V^*$.  The first example is the inner product
+$\left\langle{,}\right\rangle\in{\mathcal J}^2(\mathbb{R}^n)$.  On the
+grounds that any good mathematical commodity is worth generalizing, we
+define an <strong>inner product</strong> on $V$ to be a 2-tensor $T$
+such that $T$ is <strong>symmetric</strong>, that is $T(v,w)=T(w,v)$
+for $v,w\in V$ and such that $T$ is
+<strong>positive-definite</strong>, that is, $T(v,v) > 0$ if $v\neq
+0$.  We distinguish $\left\langle{,}\right\rangle$ as the
+<strong>usual inner product</strong> on $\mathbb{R}^n$.
+
+</p>
+<p style='margin-bottom:1em; margin-right:1em; text-align:right; font-family:Georgia'> <b>- Michael Spivak, 1969</b> <i>(Calculus on Manifolds, Perseus books).  Page 77</i>
+</p></span>
+</div>
+
+Function `inner()` returns the inner product corresponding to a matrix
+$M$.  Spivak's definition requires $M$ to be positive-definite, but
+that is not necessary in the package.  The inner product of two
+vectors $\mathbf{x}$ and $\mathbf{y}$ is usually written
+$\left\langle\mathbf{x},\mathbf{y}\right\rangle$ or
 $\mathbf{x}\cdot\mathbf{y}$, but the most general form would be
-$\mathbf{x}^TM\mathbf{y}$ where $M$ is a matrix.  Noting that inner
-products are multilinear, that is $\left\langle\mathbf{x},a\mathbf{y}+b\mathbf{z}\right\rangle=a\left\langle\mathbf{x},\mathbf{y}\right\rangle
+$\mathbf{x}^TM\mathbf{y}$.  Noting that inner products are
+multilinear, that is
+$\left\langle\mathbf{x},a\mathbf{y}+b\mathbf{z}\right\rangle=a\left\langle\mathbf{x},\mathbf{y}\right\rangle
 + b\left\langle\mathbf{x},\mathbf{z}\right\rangle$ and $\left\langle
 a\mathbf{x} +
 b\mathbf{y},\mathbf{z}\right\rangle=a\left\langle\mathbf{x},\mathbf{z}\right\rangle
@@ -50,42 +73,63 @@ Note how the rows of the tensor appear in arbitrary order.  Verify:
 x <- rnorm(7)
 y <- rnorm(7)
 V <- cbind(x,y)
-c(as.function(inner(diag(7)))(V),sum(x*y))  # should match
+LHS <- sum(x*y)
+RHS <- as.function(inner(diag(7)))(V)
+c(LHS=LHS,RHS=RHS,diff=LHS-RHS)
 ```
 
-A more stringent test would be to use a general matrix:
+Above, we see agreement between $\mathbf{x}\cdot\mathbf{y}$ calculated
+directly [`LHS`] and using `inner()` [`RHS`].  A more stringent test
+would be to use a general matrix:
 
 ```{r}
 M <- matrix(rnorm(49),7,7)
 f <- as.function(inner(M))
-c(f(V),quad.3form(M,x,y)) # should match
+LHS <- quad.3form(M,x,y)
+RHS <- f(V)
+c(LHS=LHS,RHS=RHS,diff=LHS-RHS)
 ```
 
 (function `emulator::quad.3form()` evaluates matrix products
-efficiently; `quad.form(M,x,y)` returns $x^TMy$).  Of course, we would
-expect `inner()` to be a homomorphism:
-
+efficiently; `quad.3form(M,x,y)` returns $x^TMy$).  Above we see
+agreement, to within numerical precision, of the dot product
+calculated two different ways: `LHS` uses `quad.3form()` and `RHS`
+uses `inner()`.  Of course, we would expect `inner()` to be a
+homomorphism:
 
 ```{r}
 M1 <- matrix(rnorm(49),7,7)
 M2 <- matrix(rnorm(49),7,7)
 g <- as.function(inner(M1+M2))
-c(g(V),quad.3form(M1+M2,x,y)) # should match
+LHS <- quad.3form(M1+M2,x,y)
+RHS <- g(V)
+c(LHS=LHS,RHS=RHS,diff=LHS-RHS)
 ```
 
-Now, if the matrix is symmetric the corresponding inner product should also be symmetric:
+Above we see numerical verification of the fact that
+$I(M_1+M_2)=I(M_1)+I(M_2)$, by evaluation at $\mathbf{x},\mathbf{y}$,
+again with `LHS` using direct matrix algebra and `RHS` using
+`inner()`.  Now, if the matrix is symmetric the corresponding inner
+product should also be symmetric:
 
 ```{r}
-h <- as.function(inner(M1 + t(M1)))
-c(h(V), h(V[,2:1]))  # should match
+h <- as.function(inner(M1 + t(M1))) # send inner() a symmetric matrix
+LHS <- h(V)
+RHS <- h(V[,2:1])
+c(LHS=LHS,RHS=RHS,diff=LHS-RHS)
 ```
 
-Also positive-definite matrix should return a positive quadratic form:
+Above we see that $\mathbf{x}^TM\mathbf{y} = \mathbf{y}^TM\mathbf{x}$.
+Further, a positive-definite matrix should return a positive quadratic
+form:
 
 ```{r}
 M3 <- crossprod(matrix(rnorm(56),8,7))  # 7x7 pos-def matrix
 as.function(inner(M3))(kronecker(rnorm(7),t(c(1,1))))>0  # should be TRUE
 ```
+
+Above we see the second line evaluating $\mathbf{x}^TM\mathbf{x}$ with
+$M$ positive-definite, and correctly returning a non-negative value.
 
 ## Alternating forms
 
@@ -95,5 +139,10 @@ The inner product on an antisymmetric matrix should be alternating:
 jj <- matrix(rpois(49,lambda=3.2),7,7)
 M <- jj-t(jj) # M is antisymmetric
 f <- as.function(inner(M))
-c(f(V),f(V[,2:1])) # differ in sign
+LHS <- f(V)
+RHS <- -f(V[,2:1])   # NB negative as we are checking for an alternating form
+c(LHS=LHS,RHS=RHS,diff=LHS-RHS) 
 ```
+
+Above we see that $\mathbf{x}^TM\mathbf{y} = -\mathbf{y}^TM\mathbf{x}$
+where $M$ is antisymmetric.
