@@ -310,3 +310,11 @@ E <- matrix(runif(81),9,9)
 f(E)
 det(E)*f(diag(9))  # should match f(E) by Spivak's 4.6
 
+## ----tidyup,include=FALSE-----------------------------------------------------
+i <- 0
+j <- 0
+k <- 0
+rm(i)
+rm(j)
+rm(k)
+

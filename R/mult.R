@@ -162,6 +162,12 @@
 
 `d` <- function(i){as.kform(i)}
 
+`e` <- function(i,n=i){
+    out <- numeric(n)
+    out[i] <- 1
+    return(out)
+}
+
 `kform_general`  <- function(W,k,coeffs,lose=TRUE){
     if(length(W)==1){W <- seq_len(W)}
     M <-  kform_basis(length(W),k)
@@ -337,7 +343,7 @@
 
 `contract` <- function(K,v,lose=TRUE){
     if(is.vector(v)){
-        out <- Reduce("+",Map("*", apply(index(K),1,contract_elementary,v),coeffs(K)))
+        out <- Reduce("+",Map("*", apply(index(K),1,contract_elementary,v),elements(coeffs(K))))
     } else {
         stopifnot(is.matrix(v))
         out <- K
@@ -416,7 +422,6 @@ setGeneric("lose",function(x){standardGeneric("lose")})
     jj <- coeffs(S)
     if(is.disord(value)){
         stopifnot(consistent(coeffs(S),value))
-        if((!identical(hash(jj),hash(value))) & (length(value)>1)){stop("length > 1")}
         jj <- value
     } else {
         jj[] <- value  # the meat
@@ -428,7 +433,6 @@ setGeneric("lose",function(x){standardGeneric("lose")})
     jj <- coeffs(S)
     if(is.disord(value)){
         stopifnot(consistent(coeffs(S),value))
-        if((!identical(hash(jj),hash(value))) & (length(value)>1)){stop("length > 1")}
         jj <- value
     } else {
         jj[] <- value  # the meat

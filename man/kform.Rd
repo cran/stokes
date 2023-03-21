@@ -8,6 +8,7 @@
 \alias{kform_general}
 \alias{general_kform}
 \alias{d}
+\alias{e}
 \title{k-forms}
 \description{\loadmathjax
   Functionality for dealing with \mjseqn{k}-forms
@@ -19,6 +20,7 @@ kform_basis(n, k)
 kform_general(W,k,coeffs,lose=TRUE)
 is.kform(x)
 d(i)
+e(i,n)
 \method{as.function}{kform}(x,...)
 }
 \arguments{
@@ -37,12 +39,12 @@ d(i)
 \details{
 
   A \dfn{\mjseqn{k}-form} is an alternating \mjseqn{k}-tensor.  In the
-  \pkg{stokes} package, \mjseqn{k}-forms are represented as sparse arrays
+  package, \mjseqn{k}-forms are represented as sparse arrays
   (\code{spray} objects), but with a class of \code{c("kform",
   "spray")}.  The constructor function \code{kform()} takes a
-  \code{spray} object and returns a \code{kform} object: it ensures
-  that rows of the index matrix are strictly nonnegative integers, have
-  no repeated entries, and are strictly increasing.  Function
+  \code{spray} object and returns a \code{kform} object: it ensures that
+  rows of the index matrix are strictly nonnegative integers, have no
+  repeated entries, and are strictly increasing.  Function
   \code{as.kform()} is more user-friendly.
 
   \itemize{
@@ -92,7 +94,8 @@ d(i)
 \value{
   All functions documented here return a \code{kform} object except
   \code{as.function.kform()}, which returns a function, and
-  \code{is.kform()}, which returns a Boolean.
+  \code{is.kform()}, which returns a Boolean, and \code{e()}, which
+  returns a conjugate basis to that of \code{d()}.
 }
 \references{Hubbard and Hubbard; Spivak}
 \author{Robin K. S. Hankin}
