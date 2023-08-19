@@ -2,7 +2,7 @@
 knitr::opts_chunk$set(echo = TRUE)
 options(rmarkdown.html_vignette.check_title = FALSE)
 library("stokes")
-library("emulator")
+library("emulator")    # needed for quad.3form()
 set.seed(0)
 
 ## -----------------------------------------------------------------------------

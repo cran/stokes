@@ -2,6 +2,7 @@
 knitr::opts_chunk$set(echo = TRUE)
 options(rmarkdown.html_vignette.check_title = FALSE)
 library("stokes")
+library("spray")
 library("disordR")
 library("magrittr")
 set.seed(0)

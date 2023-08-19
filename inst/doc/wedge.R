@@ -1,7 +1,7 @@
 ## ----setup, include=FALSE-----------------------------------------------------
 knitr::opts_chunk$set(echo = TRUE)
 library("stokes")
-library("emulator")
+library("spray")  # needed for spraycross()
 set.seed(0)
 
 ## -----------------------------------------------------------------------------

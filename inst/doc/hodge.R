@@ -1,13 +1,12 @@
 ## ----setup, include=FALSE-----------------------------------------------------
 knitr::opts_chunk$set(echo = TRUE)
 options(rmarkdown.html_vignette.check_title = FALSE)
-library("stokes")
-library("emulator")
 library("permutations")
+library("stokes")
 options(polyform = FALSE)
 set.seed(1)
 
-## -----------------------------------------------------------------------------
+## ----showhodgefirst-----------------------------------------------------------
 hodge
 
 ## ---- include = FALSE---------------------------------------------------------
@@ -49,6 +48,21 @@ all(replicate(10,diff(rform(),rform())))
 ## -----------------------------------------------------------------------------
 options(kform_symbolic_print = "dx")
 hodge(dx,3)
+
+## ----showvcp------------------------------------------------------------------
+vcp3
+
+## -----------------------------------------------------------------------------
+u <- c(1,4,2)
+v <- c(2,1,5)
+w <- c(1,-3,2)
+x <- c(-6,5,7)
+c(
+  hodge(as.1form(u) ^ vcp3(v,w))        == as.1form(v*sum(w*u) - w*sum(u*v)),
+  hodge(vcp3(u,v) ^ as.1form(w))        == as.1form(v*sum(w*u) - u*sum(v*w)),
+  as.1form(as.function(vcp3(v,w))(u)*u) == hodge(vcp3(u,v) ^ vcp3(u,w))     ,
+  hodge(hodge(vcp3(u,v)) ^ vcp3(w,x))   == sum(u*w)*sum(v*x) - sum(u*x)*sum(v*w)
+)		  
 
 ## -----------------------------------------------------------------------------
 options(kform_symbolic_print = NULL)  # default print method
