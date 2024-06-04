@@ -1,3 +1,14 @@
+# stokes 1.2-1
+
+- edge-cases for vector_cross_product(), now works with a single 2D vector
+- removal of dependence on emulator [in favour of quadform]
+
+# stokes 1.2-0
+
+- spray functionality imported, dependency removed
+- consistentification of vignettes
+
+
 # stokes 1.1-0
 
 - tighter integration with the `spray` and `disordR` packages

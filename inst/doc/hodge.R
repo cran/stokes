@@ -1,18 +1,26 @@
 ## ----setup, include=FALSE-----------------------------------------------------
-knitr::opts_chunk$set(echo = TRUE)
-options(rmarkdown.html_vignette.check_title = FALSE)
+set.seed(0)
 library("permutations")
 library("stokes")
+options(rmarkdown.html_vignette.check_title = FALSE)
 options(polyform = FALSE)
-set.seed(1)
+knitr::opts_chunk$set(echo = TRUE)
+knit_print.function <- function(x, ...){dput(x)}
+registerS3method(
+  "knit_print", "function", knit_print.function,
+  envir = asNamespace("knitr")
+)
 
-## ----showhodgefirst-----------------------------------------------------------
+## ----out.width='20%', out.extra='style="float:right; padding:10px"',echo=FALSE----
+knitr::include_graphics(system.file("help/figures/stokes.png", package = "stokes"))
+
+## ----label=showhodge,comment=""-----------------------------------------------
 hodge
 
-## ---- include = FALSE---------------------------------------------------------
+## ----label=setsymbprint,include = FALSE---------------------------------------
 options(kform_symbolic_print = NULL)
 
-## -----------------------------------------------------------------------------
+## ----label=simpexamp----------------------------------------------------------
 (a <- d(2) ^ d(6) ^ d(7))
 hodge(a,9)
 

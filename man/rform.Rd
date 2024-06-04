@@ -4,8 +4,8 @@
 \alias{rtensor}
 \alias{rktensor}
 \title{Random kforms and ktensors}
-\description{\loadmathjax
-  Random \mjseqn{k}-form objects and \mjseqn{k}-tensors,
+\description{
+  Random \eqn{k}-form objects and \eqn{k}-tensors,
   intended as quick \dQuote{get you going} examples}
 \usage{
 rform(terms=9,k=3,n=7,coeffs,ensure=TRUE)
@@ -13,14 +13,14 @@ rtensor(terms=9,k=3,n=7,coeffs)
 }
 \arguments{
   \item{terms}{Number of distinct terms}
-  \item{k,n}{A \mjseqn{k}-form maps \mjseqn{V^k} to \mjseqn{R}, where
-    \mjseqn{V=R^n}} 
+  \item{k,n}{A \eqn{k}-form maps \eqn{V^k} to
+    \eqn{\mathbb{R}}{R}, where \eqn{V=\mathbb{R}^n}{R^n}}
   \item{coeffs}{The coefficients of the form; if missing use
     \code{seq_len(terms)}}
-\item{ensure}{Boolean with default \code{TRUE} meaning to ensure that
-  the \code{dovs()} of the returned value is in fact equal to \code{n}.
-  If \code{FALSE}, sometimes the \code{dovs()} is strictly less than
-  \code{n} because of random sampling}
+  \item{ensure}{Boolean with default \code{TRUE} meaning to ensure that
+    the \code{dovs()} of the returned value is in fact equal to
+    \code{n}.  If \code{FALSE}, sometimes the \code{dovs()} is strictly
+    less than \code{n} because of random sampling}
 }
 \details{
   What you see is what you get, basically.
@@ -37,7 +37,7 @@ rtensor(terms=9,k=3,n=7,coeffs)
 \examples{
 
 rform()
-rform() \%^\% rform()
+rform() ^ rform()
 
 rtensor() \%X\% rtensor()
 

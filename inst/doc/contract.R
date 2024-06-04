@@ -1,13 +1,21 @@
 ## ----setup, include=FALSE-----------------------------------------------------
-knitr::opts_chunk$set(echo = TRUE)
-options(rmarkdown.html_vignette.check_title = FALSE)
+set.seed(0)
 library("stokes")
 library("spray")
 library("disordR")
 library("magrittr")
-set.seed(0)
+knitr::opts_chunk$set(echo = TRUE)
+options(rmarkdown.html_vignette.check_title = FALSE)
+knit_print.function <- function(x, ...){dput(x)}
+registerS3method(
+  "knit_print", "function", knit_print.function,
+  envir = asNamespace("knitr")
+)
 
-## -----------------------------------------------------------------------------
+## ----out.width='20%', out.extra='style="float:right; padding:10px"',echo=FALSE----
+knitr::include_graphics(system.file("help/figures/stokes.png", package = "stokes"))
+
+## ----label=showcontract,comment=""--------------------------------------------
 contract
 contract_elementary
 
@@ -51,7 +59,7 @@ contract(phi^psi,v) ==  contract(phi,v) ^ psi - phi ^ contract(psi,v)
 ## ----label=quitecomplicated---------------------------------------------------
 summary(contract(phi^psi,v))
 
-## ---- label=signswitch--------------------------------------------------------
+## ----label=signswitch---------------------------------------------------------
 contract(psi^phi,v) ==  contract(psi,v) ^ phi + psi ^ contract(phi,v)
 
 ## ----label=straight-----------------------------------------------------------
@@ -99,7 +107,7 @@ v <- c(1,2,10,11,71)
 (-1)^(3+1) * as.kform(o[-3])*v[o[3]]
 )
 
-## ---- label=ceex--------------------------------------------------------------
+## ----label=ceex---------------------------------------------------------------
 contract_elementary(o,v)
 
 ## ----label=meatcontract-------------------------------------------------------

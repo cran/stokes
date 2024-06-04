@@ -1,8 +1,11 @@
 ## ----setup, include=FALSE-----------------------------------------------------
+set.seed(0)
+library("stokes")
 knitr::opts_chunk$set(echo = TRUE)
 options(rmarkdown.html_vignette.check_title = FALSE)
-library("stokes")
-set.seed(0)
+
+## ----out.width='20%', out.extra='style="float:right; padding:10px"',echo=FALSE----
+knitr::include_graphics(system.file("help/figures/stokes.png", package = "stokes"))
 
 ## ----label=definedxdydz-------------------------------------------------------
 dx <- d(1)

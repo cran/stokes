@@ -1,11 +1,19 @@
 ## ----setup, include=FALSE-----------------------------------------------------
+set.seed(0)
+library("stokes")
+library("quadform")    # needed for quad3.form()
 knitr::opts_chunk$set(echo = TRUE)
 options(rmarkdown.html_vignette.check_title = FALSE)
-library("stokes")
-library("emulator")    # needed for quad.3form()
-set.seed(0)
+knit_print.function <- function(x, ...){dput(x)}
+registerS3method(
+  "knit_print", "function", knit_print.function,
+  envir = asNamespace("knitr")
+)
 
-## -----------------------------------------------------------------------------
+## ----out.width='20%', out.extra='style="float:right; padding:10px"',echo=FALSE----
+knitr::include_graphics(system.file("help/figures/stokes.png", package = "stokes"))
+
+## ----label=showAlt,comment=""-------------------------------------------------
 inner
 
 ## -----------------------------------------------------------------------------
@@ -22,7 +30,7 @@ c(LHS=LHS,RHS=RHS,diff=LHS-RHS)
 ## -----------------------------------------------------------------------------
 M <- matrix(rnorm(49),7,7)
 f <- as.function(inner(M))
-LHS <- quad.3form(M,x,y)
+LHS <- quad3.form(M,x,y)
 RHS <- f(V)
 c(LHS=LHS,RHS=RHS,diff=LHS-RHS)
 
@@ -30,7 +38,7 @@ c(LHS=LHS,RHS=RHS,diff=LHS-RHS)
 M1 <- matrix(rnorm(49),7,7)
 M2 <- matrix(rnorm(49),7,7)
 g <- as.function(inner(M1+M2))
-LHS <- quad.3form(M1+M2,x,y)
+LHS <- quad3.form(M1+M2,x,y)
 RHS <- g(V)
 c(LHS=LHS,RHS=RHS,diff=LHS-RHS)
 

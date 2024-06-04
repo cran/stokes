@@ -5,7 +5,7 @@
 \title{
 \packageTitle{stokes}
 }
-\description{\loadmathjax
+\description{
 \packageDescription{stokes}
 }
 \details{
@@ -14,10 +14,10 @@ The DESCRIPTION file:
 \packageDESCRIPTION{stokes}
 \packageIndices{stokes}
 
-Generally in the package, arguments that are \mjseqn{k}-forms are
-denoted \code{K}, \mjseqn{k}-tensors by \code{U}, and spray objects by
-\code{S}.  Multilinear maps (which may be either \mjseqn{k}-forms or
-\mjseqn{k}-tensors) are denoted by \code{M}.
+Generally in the package, arguments that are \eqn{k}-forms are
+denoted \code{K}, \eqn{k}-tensors by \code{U}, and spray objects by
+\code{S}.  Multilinear maps (which may be either \eqn{k}-forms or
+\eqn{k}-tensors) are denoted by \code{M}.
 
 }
 \author{
@@ -27,11 +27,13 @@ Maintainer: \packageMaintainer{stokes}
 }
 \references{
   \itemize{
-    \item J. H. Hubbard and B. B. Hubbard 2015.  \emph{Vector
-      calculus, linear algebra and differential forms: a unified
-      approach}.  Ithaca, NY.
     \item M. Spivak 1971. \emph{Calculus on manifolds},
     Addison-Wesley.
+    \item R. K. S. Hankin 2022.  \dQuote{Disordered vectors in \R:
+    introducing the \CRANpkg{disordR} package.}
+    \url{https://arxiv.org/abs/2210.03856}.
+    \item R. K. S. Hankin 2022.  \dQuote{Sparse arrays in \R: the
+    \CRANpkg{spray} package.  \url{https://arxiv.org/abs/2210.03856}.}
   }
 }
 \keyword{ package }

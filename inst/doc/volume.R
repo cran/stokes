@@ -1,10 +1,18 @@
 ## ----setup, include=FALSE-----------------------------------------------------
-knitr::opts_chunk$set(echo = TRUE)
-options(rmarkdown.html_vignette.check_title = FALSE)
-library("stokes")
 set.seed(0)
+library("stokes")
+options(rmarkdown.html_vignette.check_title = FALSE)
+knitr::opts_chunk$set(echo = TRUE)
+knit_print.function <- function(x, ...){dput(x)}
+registerS3method(
+  "knit_print", "function", knit_print.function,
+  envir = asNamespace("knitr")
+)
 
-## -----------------------------------------------------------------------------
+## ----out.width='20%', out.extra='style="float:right; padding:10px"',echo=FALSE----
+knitr::include_graphics(system.file("help/figures/stokes.png", package = "stokes"))
+
+## ----label=showvol,comment=""-------------------------------------------------
 volume
 
 ## -----------------------------------------------------------------------------

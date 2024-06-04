@@ -4,9 +4,6 @@ export("0tensor")
 export("%^%")
 export("%X%")
 
-
-import("mathjaxr")
-
 importFrom("spray","spray")
 importFrom("spray","as.spray")
 importFrom("spray","index")
@@ -54,3 +51,4 @@ S3method("summary",kform)
 S3method("print",summary.kform)
 S3method("summary",ktensor)
 S3method("print",summary.ktensor)
+
