@@ -14,7 +14,7 @@ rtensor(terms=9,k=3,n=7,coeffs)
 \arguments{
   \item{terms}{Number of distinct terms}
   \item{k,n}{A \eqn{k}-form maps \eqn{V^k} to
-    \eqn{\mathbb{R}}{R}, where \eqn{V=\mathbb{R}^n}{R^n}}
+    \eqn{\mathbb{R}}{R}, where \eqn{V=\mathbb{R}^n}{V=R^n}}
   \item{coeffs}{The coefficients of the form; if missing use
     \code{seq_len(terms)}}
   \item{ensure}{Boolean with default \code{TRUE} meaning to ensure that
@@ -23,7 +23,7 @@ rtensor(terms=9,k=3,n=7,coeffs)
     less than \code{n} because of random sampling}
 }
 \details{
-  What you see is what you get, basically.
+  Random \eqn{k}-form objects and \eqn{k}-tensors, of moderate complexity.
 
   Note that argument \code{terms} is an upper bound, as the index matrix
   might contain repeats which are combined.
@@ -36,12 +36,15 @@ rtensor(terms=9,k=3,n=7,coeffs)
 \author{Robin K. S. Hankin}
 \examples{
 
-rform()
-rform() ^ rform()
+(a <- rform())
+(b <- rform())
+a ^ b
 
-rtensor() \%X\% rtensor()
+a
+a ^ dx
+a ^ dx ^ dy
 
-rform() ^ dx
-rform() ^ dx ^ dy
+(x <- rtensor())
+x \%X\% x
 
 }

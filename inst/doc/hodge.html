@@ -415,7 +415,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
     as.kform(newindex, x_metric * x_coeffs * x_sign)
 }</code></pre>
 <p>To cite the <code>stokes</code> package in publications, please use
-<span class="citation">Hankin (2022)</span>. Given a <span class="math inline">\(k\)</span>-form <span class="math inline">\(\beta\)</span>, function <code>hodge()</code>
+<span class="citation">Hankin (<a href="#ref-hankin2022_stokes">2022</a>)</span>. Given a <span class="math inline">\(k\)</span>-form <span class="math inline">\(\beta\)</span>, function <code>hodge()</code>
 returns its Hodge dual <span class="math inline">\(\star\beta\)</span>.
 Formally, if <span class="math inline">\(V={\mathbb R}^n\)</span>, and
 <span class="math inline">\(\Lambda^k(V)\)</span> is the space of
@@ -463,7 +463,7 @@ set</p>
 \right|1\leqslant i_1 &lt; \cdots &lt; i_k\leqslant n
 \right\rbrace.
 \]</span></p>
-<p>This means that basis elements are things like <span class="math inline">\(\omega_2\wedge\omega_6\wedge\omega_7\)</span>. f
+<p>This means that basis elements are things like <span class="math inline">\(\omega_2\wedge\omega_6\wedge\omega_7\)</span>. If
 <span class="math inline">\(V=\mathbb{R}^9\)</span>, what is <span class="math inline">\(\star\omega_2\wedge\omega_6\wedge\omega_7\)</span>?</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>(a <span class="ot">&lt;-</span> <span class="fu">d</span>(<span class="dv">2</span>) <span class="sc">^</span> <span class="fu">d</span>(<span class="dv">6</span>) <span class="sc">^</span> <span class="fu">d</span>(<span class="dv">7</span>))</span></code></pre></div>
 <pre><code>## An alternating linear map from V^3 to R with V=R^7:
@@ -476,15 +476,15 @@ set</p>
 <p>See how <span class="math inline">\(\star a\)</span> has index
 entries 1-9 except <span class="math inline">\(2,6,7\)</span> (from
 <span class="math inline">\(a\)</span>). The (numerical) sign is
-negative because the permution has negative (permutational) sign. We can
-verify this using the <code>permutations</code> package:</p>
+negative because the permutation has negative (permutational) sign. We
+can verify this using the <code>permutations</code> package:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">6</span>,<span class="dv">7</span>,  <span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">8</span>,<span class="dv">9</span>)</span>
 <span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>(pw <span class="ot">&lt;-</span> <span class="fu">as.word</span>(p))</span></code></pre></div>
 <pre><code>## [1] (1264)(375)
 ## [coerced from word form]</code></pre>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">print_word</span>(pw)</span></code></pre></div>
-<pre><code>##     {1} {2} {3} {4} {5} {6} {7} {8} {9}
-## [1] 2   6   7   1   3   4   5   .   .</code></pre>
+<pre><code>##     1 2 3 4 5 6 7 8 9
+## [1] 2 6 7 1 3 4 5 . .</code></pre>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">sgn</span>(pw)</span></code></pre></div>
 <pre><code>## [1] -1</code></pre>
 <p>Above we see the sign of the permutation is negative. More succinct

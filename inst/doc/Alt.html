@@ -382,8 +382,8 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
     ktensor(include_perms(consolidate(out))/factorial(ncol(index(out))))
 }</code></pre>
 <p>To cite the <code>stokes</code> package in publications, please use
-<span class="citation">Hankin (2022)</span>. <span class="citation">Spivak (1965)</span>, in a memorable passage,
-states:</p>
+<span class="citation">Hankin (<a href="#ref-hankin2022_stokes">2022</a>)</span>. <span class="citation">Spivak (<a href="#ref-spivak1965">1965</a>)</span>, in
+a memorable passage, states:</p>
 <div class="warning" style="padding:0.1em; background-color:#E9D8FD; color:#69337A">
 <span>
 <p>
@@ -581,8 +581,8 @@ to construct a tensor that is alternating, and then show that
 </div>
 <div id="wedge-product" class="section level1">
 <h1>Wedge product</h1>
-<p>Spivak defines the wedge product as follows. Given alternating forms
-<span class="math inline">\(\omega\in\Lambda^k(V)\)</span> and <span class="math inline">\(\eta\in\Lambda^l(V)\)</span> we have</p>
+<p>(Main article: <a href="wedge.html">wedge product</a>). Spivak
+defines the wedge product as follows. Given alternating forms <span class="math inline">\(\omega\in\Lambda^k(V)\)</span> and <span class="math inline">\(\eta\in\Lambda^l(V)\)</span> we have</p>
 <p><span class="math display">\[
 \omega\wedge\eta=\frac{(k+l)!}{k!l!}\operatorname{Alt}(\omega\otimes\eta)
 \]</span></p>
@@ -771,8 +771,8 @@ the same object:</p>
 <span id="cb65-2"><a href="#cb65-2" tabindex="-1"></a>LHS <span class="ot">&lt;-</span> <span class="fu">as.function</span>(S1)(V)</span>
 <span id="cb65-3"><a href="#cb65-3" tabindex="-1"></a>RHS <span class="ot">&lt;-</span> <span class="fu">as.function</span>(SA1)(V)</span>
 <span id="cb65-4"><a href="#cb65-4" tabindex="-1"></a><span class="fu">c</span>(<span class="at">LHS=</span>LHS,<span class="at">RHS=</span>RHS,<span class="at">diff=</span>LHS<span class="sc">-</span>RHS)</span></code></pre></div>
-<pre><code>##      LHS      RHS     diff 
-## 23.86928 23.86928  0.00000</code></pre>
+<pre><code>##           LHS           RHS          diff 
+##  2.386928e+01  2.386928e+01 -1.065814e-14</code></pre>
 <p>Above we see agreement to within numerical error.</p>
 <div id="references" class="section level2 unnumbered">
 <h2 class="unnumbered">References</h2>

@@ -3,6 +3,7 @@ title: "The `hodge()` function in the `stokes` package"
 author: "Robin K. S. Hankin"
 output: html_vignette
 bibliography: stokes.bib
+link-citations: true
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteIndexEntry{hodge}
@@ -87,7 +88,7 @@ $\Lambda^k(V)$ is given by the set
 \]
 
 This means that basis elements are things like
-$\omega_2\wedge\omega_6\wedge\omega_7$.  f $V=\mathbb{R}^9$, what is
+$\omega_2\wedge\omega_6\wedge\omega_7$.  If $V=\mathbb{R}^9$, what is
 $\star\omega_2\wedge\omega_6\wedge\omega_7$?
 
 
@@ -97,7 +98,7 @@ hodge(a,9)
 ```
 
 See how $\star a$ has index entries 1-9 except $2,6,7$ (from $a$).
-The (numerical) sign is negative because the permution has negative
+The (numerical) sign is negative because the permutation has negative
 (permutational) sign.  We can verify this using the `permutations`
 package:
 

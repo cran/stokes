@@ -130,3 +130,6 @@ apply(1,contract_elementary,v)       %>%
 Map("*", ., K %>% coeffs %>% elements) %>%
 Reduce("+",.)
 
+## ----tidyup, include=FALSE----------------------------------------------------
+rm(phi)
+

@@ -370,11 +370,12 @@ and <code>dz</code> in the <code>stokes</code> package</h1>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>dy <span class="ot">&lt;-</span> <span class="fu">d</span>(<span class="dv">2</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>dz <span class="ot">&lt;-</span> <span class="fu">d</span>(<span class="dv">3</span>)</span></code></pre></div>
 <p>To cite the <code>stokes</code> package in publications, please use
-<span class="citation">Hankin (2022)</span>. Convenience objects
+<span class="citation">Hankin (<a href="#ref-hankin2022_stokes">2022</a>)</span>. Convenience objects
 <code>dx</code>, <code>dy</code>, and <code>dz</code>, corresponding to
-elementary differential forms, are discussed here (basis vectors <span class="math inline">\(e_1\)</span>, <span class="math inline">\(e_2\)</span>, <span class="math inline">\(e_2\)</span> are discussed in
-<code>ex.Rmd</code>). <span class="citation">Spivak (1965)</span>, in a
-memorable passage, states:</p>
+elementary differential forms, are discussed here (basis vectors <span class="math inline">\(e_1\)</span>, <span class="math inline">\(e_2\)</span>, <span class="math inline">\(e_2\)</span> are discussed in vignette
+<code>ex.Rmd</code>).</p>
+<p><span class="citation">Spivak (<a href="#ref-spivak1965">1965</a>)</span>, in a memorable passage,
+states:</p>
 <div class="warning" style="padding:0.1em; background-color:#E9D8FD; color:#69337A">
 <span>
 <p style="margin-top:1em; text-align:center">
@@ -399,65 +400,160 @@ Page 89</i>
 <p></span></p>
 </div>
 <p>Spivak goes on to observe that every <span class="math inline">\(k\)</span>-form <span class="math inline">\(\omega\)</span> can be written <span class="math inline">\(\omega=\sum_{i_1 &lt; \cdots &lt;
-i_k}\omega_{i_1,\ldots
+i_k}\omega_{i_1,\ldots,
 i_k}\mathrm{d}x^{i_1}\wedge\cdots\wedge\mathrm{d}x^{i_k}\)</span>. If
 working in <span class="math inline">\(\mathbb{R}^3\)</span>, we have
 three elementary forms <span class="math inline">\(\mathrm{d}x\)</span>,
 <span class="math inline">\(\mathrm{d}y\)</span>, and <span class="math inline">\(\mathrm{d}z\)</span>; in the package we have the
 pre-defined objects <code>dx</code>, <code>dy</code>, and
-<code>dz</code>. These are convenient for reproducing textbook results.
-We start with some illustrations of the package print method.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>dx</span></code></pre></div>
+<code>dz</code>. These are convenient for reproducing textbook
+results.</p>
+<p>We conceptualise <code>dx</code> as “picking out” the <span class="math inline">\(x\)</span>-component of a 3-vector and similarly
+for <code>dy</code> and <code>dz</code>. Recall that <span class="math inline">\(\mathrm{d}x\colon\mathbb{R}^3\longrightarrow\mathbb{R}\)</span>
+and we have</p>
+<p><span class="math display">\[
+dx\begin{pmatrix}u_1\\u_2\\u_3\end{pmatrix} = u_1\qquad
+dy\begin{pmatrix}u_1\\u_2\\u_3\end{pmatrix} = u_2\qquad
+dz\begin{pmatrix}u_1\\u_2\\u_3\end{pmatrix} = u_3.
+\]</span></p>
+<p>Noting that <span class="math inline">\(1\)</span>-forms are a vector
+space, we have in general</p>
+<p><span class="math display">\[(a\cdot\mathrm{d}x + b\cdot\mathrm{d}y
++c\cdot\mathrm{d}z)
+\begin{pmatrix}u_1\\u_2\\u_3\end{pmatrix} = au_1+bu_2+cu_3 \]</span></p>
+<p>Numerically:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">7</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">c</span>(<span class="fu">as.function</span>(dx)(v),<span class="fu">as.function</span>(dx<span class="sc">+</span>dy)(v),<span class="fu">as.function</span>(dx<span class="sc">+</span><span class="dv">100</span><span class="sc">*</span>dz)(v))</span></code></pre></div>
+<pre><code>## [1]   2   5 702</code></pre>
+<p>As Spivak says, <code>dx</code>, <code>dy</code> and <code>dz</code>
+are conjugate to <span class="math inline">\(e_1,e_2,e_3\)</span> and
+these are defined using function <code>e()</code>. In this case it is
+safer to pass <code>n=3</code> to function <code>e()</code> in order to
+specify that we are working in <span class="math inline">\(\mathbb{R}^3\)</span>.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">e</span>(<span class="dv">1</span>,<span class="dv">3</span>)</span></code></pre></div>
+<pre><code>## [1] 1 0 0</code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">e</span>(<span class="dv">2</span>,<span class="dv">3</span>)</span></code></pre></div>
+<pre><code>## [1] 0 1 0</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">e</span>(<span class="dv">3</span>,<span class="dv">3</span>)</span></code></pre></div>
+<pre><code>## [1] 0 0 1</code></pre>
+<p>We will now verify numerically that <code>dx</code>, <code>dy</code>
+and <code>dz</code> are indeed conjugate to <span class="math inline">\(e_1,e_2,e_3\)</span>, but to do this we will
+define an orthonormal set of vectors <span class="math inline">\(u,v,w\)</span>:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="fu">e</span>(<span class="dv">1</span>,<span class="dv">3</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fu">e</span>(<span class="dv">2</span>,<span class="dv">3</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>w <span class="ot">&lt;-</span> <span class="fu">e</span>(<span class="dv">3</span>,<span class="dv">3</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="fu">matrix</span>(<span class="fu">c</span>(</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>    <span class="fu">as.function</span>(dx)(u), <span class="fu">as.function</span>(dx)(v), <span class="fu">as.function</span>(dx)(w),</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>    <span class="fu">as.function</span>(dy)(u), <span class="fu">as.function</span>(dy)(v), <span class="fu">as.function</span>(dy)(w),</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>    <span class="fu">as.function</span>(dz)(u), <span class="fu">as.function</span>(dz)(v), <span class="fu">as.function</span>(dz)(w)</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>),<span class="dv">3</span>,<span class="dv">3</span>)</span></code></pre></div>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    1    0    0
+## [2,]    0    1    0
+## [3,]    0    0    1</code></pre>
+<p>Above we see the conjugacy clearly [obtaining <span class="math inline">\(I_3\)</span> as expected].</p>
+<div id="wedge-products" class="section level2">
+<h2>Wedge products</h2>
+<p>The elementary forms may be combined with a wedge product. We note
+that <span class="math inline">\(\mathrm{d}x\wedge\mathrm{d}y\colon\left(\mathbb{R}^3\right)^2\longrightarrow\mathbb{R}\)</span>
+and, for example,</p>
+<p><span class="math display">\[
+(\mathrm{d}x\wedge\mathrm{d}y)\left(
+\begin{pmatrix}u_1\\u_2\\u_3\end{pmatrix},
+\begin{pmatrix}v_1\\v_2\\v_3\end{pmatrix}
+\right)
+=
+\det\begin{pmatrix}u_1&amp;v_1\\u_2&amp;v_2\end{pmatrix}
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+(\mathrm{d}x\wedge\mathrm{d}y\wedge\mathrm{d}z)
+\left(
+\begin{pmatrix}u_1\\u_2\\u_3\end{pmatrix},
+\begin{pmatrix}v_1\\v_2\\v_3\end{pmatrix},
+\begin{pmatrix}w_1\\w_2\\w_3\end{pmatrix}
+\right)
+=
+\det\begin{pmatrix}u_1&amp;v_1&amp;w_1\\u_2&amp;v_2&amp;w_2\\u_3&amp;v_3&amp;w_3\end{pmatrix}
+\]</span></p>
+<p>Numerically:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">as.function</span>(dx <span class="sc">^</span> dy)(<span class="fu">cbind</span>(<span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">5</span>),<span class="fu">c</span>(<span class="dv">4</span>,<span class="dv">1</span>,<span class="dv">2</span>)))</span></code></pre></div>
+<pre><code>## [1] -10</code></pre>
+<p>Above we see the package correctly giving <span class="math inline">\(\det\begin{pmatrix}2&amp;4\\3&amp;1\end{pmatrix}=2-12=-10\)</span>.</p>
+</div>
+<div id="the-print-method" class="section level1">
+<h1>The print method</h1>
+<p>Here I give some illustrations of the package print method.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>dx</span></code></pre></div>
 <pre><code>## An alternating linear map from V^1 to R with V=R^1:
 ##        val
 ##  1  =    1</code></pre>
 <p>This is somewhat opaque and difficult to understand. It is easier to
-start with a more complicated example: take <span class="math inline">\(\mathrm{d}x\wedge\mathrm{d}y
+start with a more complicated example: take <span class="math inline">\(X=\mathrm{d}x\wedge\mathrm{d}y
 -7\mathrm{d}x\wedge\mathrm{d}z +
 3\mathrm{d}y\wedge\mathrm{d}z\)</span>:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>dx<span class="sc">^</span>dy <span class="sc">-</span><span class="dv">7</span><span class="sc">*</span>dx<span class="sc">^</span>dz <span class="sc">+</span> <span class="dv">3</span><span class="sc">*</span>dy<span class="sc">^</span>dz</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>(X <span class="ot">&lt;-</span> dx<span class="sc">^</span>dy <span class="sc">-</span><span class="dv">7</span><span class="sc">*</span>dx<span class="sc">^</span>dz <span class="sc">+</span> <span class="dv">3</span><span class="sc">*</span>dy<span class="sc">^</span>dz)</span></code></pre></div>
 <pre><code>## An alternating linear map from V^2 to R with V=R^3:
 ##          val
 ##  1 3  =   -7
 ##  2 3  =    3
 ##  1 2  =    1</code></pre>
-<p>We see three rows for the three elementary components. Taking the row
-with coefficient <span class="math inline">\(-7\)</span> [which would be
-<span class="math inline">\(-7\mathrm{d}x\wedge\mathrm{d}z\)</span>],
-this maps <span class="math inline">\(\left(\mathbb{R}^3\right)^2\)</span> to <span class="math inline">\(\mathbb{R}\)</span> and we have</p>
+<p>We see that <code>X</code> has three rows for the three elementary
+components. Taking the row with coefficient <span class="math inline">\(-7\)</span> [which would be <span class="math inline">\(-7\mathrm{d}x\wedge\mathrm{d}z\)</span>], this
+maps <span class="math inline">\(\left(\mathbb{R}^3\right)^2\)</span> to
+<span class="math inline">\(\mathbb{R}\)</span> and we have</p>
 <p><span class="math display">\[(-7\mathrm{d}x\wedge\mathrm{d}z)\left(\begin{pmatrix}
 u_1\\u_2\\u_3\end{pmatrix},
 \begin{pmatrix}v_1\\v_2\\v_3\end{pmatrix}\right)=
--7\det\begin{pmatrix}u_1&amp;v_1\\u_3&amp;v_3\end{pmatrix}\]</span></p>
-<p>Armed with this familiar fact, we can interpret <span class="math inline">\(dx\)</span> as a map from <span class="math inline">\(\left(\mathbb{R}^3\right)^1\)</span> to <span class="math inline">\(\mathbb{R}\)</span> with</p>
-<p><span class="math display">\[\mathrm{d}x\left(\begin{pmatrix}
-u_1\\u_2\\u_3\end{pmatrix}
-\right)=
-\det\begin{pmatrix}u_1\end{pmatrix}=u_1\]</span></p>
-<p>or, in other words, <span class="math inline">\(\mathrm{d}x\)</span>
-picks out the first component of its vector (as the print method gives,
-albeit obscurely). This is easily shown in the package:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">as.function</span>(dx)(<span class="fu">c</span>(<span class="dv">113</span>,<span class="dv">3</span>,<span class="dv">6</span>))</span></code></pre></div>
-<pre><code>## [1] 113</code></pre>
+-7\det\begin{pmatrix}u_1&amp;v_1\\u_3&amp;v_3\end{pmatrix}
+\]</span></p>
+<p>The other two rows would be</p>
+<p><span class="math display">\[(3\mathrm{d}y\wedge\mathrm{d}z)\left(
+\begin{pmatrix}u_1\\u_2\\u_3\end{pmatrix},
+\begin{pmatrix}v_1\\v_2\\v_3\end{pmatrix}
+\right)
+=
+3\det\begin{pmatrix}u_2&amp;v_2\\u_3&amp;v_3\end{pmatrix}\]</span></p>
+<p>and</p>
+<p><span class="math display">\[(1\mathrm{d}x\wedge\mathrm{d}y)\left(
+\begin{pmatrix}u_1\\u_2\\u_3\end{pmatrix},
+\begin{pmatrix}v_1\\v_2\\v_3\end{pmatrix}
+\right)
+=
+\det\begin{pmatrix}u_1&amp;v_1\\u_2&amp;v_2\end{pmatrix}
+\]</span></p>
+<p>Thus form <span class="math inline">\(X\)</span> would be, by
+linearity</p>
+<p><span class="math display">\[
+X\left(
+\begin{pmatrix}u_1\\u_2\\u_3\end{pmatrix},
+\begin{pmatrix}v_1\\v_2\\v_3\end{pmatrix}
+\right)
+=
+-7\det\begin{pmatrix}u_1&amp;v_1\\u_3&amp;v_3\end{pmatrix}
++3\det\begin{pmatrix}u_2&amp;v_2\\u_3&amp;v_3\end{pmatrix}
++\det\begin{pmatrix}u_1&amp;v_1\\u_2&amp;v_2\end{pmatrix}.
+\]</span></p>
 <p>We might want to verify that <span class="math inline">\(\mathrm{d}x\wedge\mathrm{d}y=-\mathrm{d}y\wedge\mathrm{d}x\)</span>:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>dx <span class="sc">^</span> dy <span class="sc">==</span> <span class="sc">-</span>dy <span class="sc">^</span> dx</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a>dx <span class="sc">^</span> dy <span class="sc">==</span> <span class="sc">-</span>dy <span class="sc">^</span> dx</span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
-<div id="elementary-forms-and-the-print-method" class="section level1">
-<h1>Elementary forms and the print method</h1>
+</div>
+<div id="configuring-the-print-method" class="section level1">
+<h1>Configuring the print method</h1>
 <p>The print method is configurable and can display kforms in symbolic
 form. For working with <code>dx dy dz</code> we may set option
 <code>kform_symbolic_print</code> to <code>dx</code>:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">options</span>(<span class="at">kform_symbolic_print =</span> <span class="st">&#39;dx&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">options</span>(<span class="at">kform_symbolic_print =</span> <span class="st">&#39;dx&#39;</span>)</span></code></pre></div>
 <p>Then the results of calculations are more natural:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>dx</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a>dx</span></code></pre></div>
 <pre><code>## An alternating linear map from V^1 to R with V=R^1:
 ##  + dx</code></pre>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>dx<span class="sc">^</span>dy <span class="sc">+</span> <span class="dv">56</span><span class="sc">*</span>dy<span class="sc">^</span>dz</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a>dx<span class="sc">^</span>dy <span class="sc">+</span> <span class="dv">56</span><span class="sc">*</span>dy<span class="sc">^</span>dz</span></code></pre></div>
 <pre><code>## An alternating linear map from V^2 to R with V=R^3:
 ##  + dx^dy +56 dy^dz</code></pre>
 <p>However, this setting can be confusing if we work with <span class="math inline">\(\mathrm{d}x^i,i&gt;3\)</span>, for the print
 method runs out of alphabet:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">rform</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="fu">rform</span>()</span></code></pre></div>
 <pre><code>## An alternating linear map from V^3 to R with V=R^7:
 ##  +6 dy^dNA^dNA +5 dy^dNA^dNA -9 dNA^dNA^dNA +4 dx^dz^dNA +7 dx^dNA^dNA -3 dy^dz^dNA -8 dx^dNA^dNA +2 dx^dy^dNA + dx^dNA^dNA</code></pre>
 <p>Above, we see the use of <code>NA</code> because there is no defined
@@ -465,33 +561,35 @@ symbol.</p>
 <div id="the-hodge-dual" class="section level2">
 <h2>The Hodge dual</h2>
 <p>Function <code>hodge()</code> returns the Hodge dual:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="fu">hodge</span>(dx<span class="sc">^</span>dy <span class="sc">+</span> <span class="dv">13</span><span class="sc">*</span>dy<span class="sc">^</span>dz)</span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a><span class="fu">hodge</span>(dx<span class="sc">^</span>dy <span class="sc">+</span> <span class="dv">13</span><span class="sc">*</span>dy<span class="sc">^</span>dz)</span></code></pre></div>
 <pre><code>## An alternating linear map from V^1 to R with V=R^3:
 ##  +13 dx + dz</code></pre>
 <p>Note that calling <code>hodge(dx)</code> can be confusing:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="fu">hodge</span>(dx)</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a><span class="fu">hodge</span>(dx)</span></code></pre></div>
 <pre><code>## [1] 1</code></pre>
 <p>This returns a scalar because <code>dx</code> is interpreted as a
 one-form on one-dimensional space, which is a scalar form. One usually
 wants the result in three dimensions:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="fu">hodge</span>(dx,<span class="dv">3</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" tabindex="-1"></a><span class="fu">hodge</span>(dx,<span class="dv">3</span>)</span></code></pre></div>
 <pre><code>## An alternating linear map from V^2 to R with V=R^3:
 ##  + dy^dz</code></pre>
 <p>This is further discussed in the <code>dovs</code> vignette.</p>
 </div>
-<div id="other-ways-to-create-the-elementary-one-forms" class="section level2">
-<h2>Other ways to create the elementary one-forms</h2>
-<p>It is possible to create these objects using package idiom:</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="fu">d</span>(<span class="dv">1</span>) <span class="sc">==</span> dx</span></code></pre></div>
-<pre><code>## [1] TRUE</code></pre>
-</div>
-<div id="basis-vectors" class="section level2">
-<h2>Basis vectors</h2>
+<div id="creating-elementary-one-forms" class="section level2">
+<h2>Creating elementary one-forms</h2>
+<p>Package function <code>d()</code> will create elementary one-forms
+but it is easier to interpret the output if we restore the default print
+method</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" tabindex="-1"></a><span class="fu">options</span>(<span class="at">kform_symbolic_print =</span> <span class="cn">NULL</span>)</span>
+<span id="cb33-2"><a href="#cb33-2" tabindex="-1"></a><span class="fu">d</span>(<span class="dv">8</span>)</span></code></pre></div>
+<pre><code>## An alternating linear map from V^1 to R with V=R^8:
+##        val
+##  8  =    1</code></pre>
 <div id="package-dataset" class="section level3">
 <h3>Package dataset</h3>
 <p>Following lines create <code>dx.rda</code>, residing in the
 <code>data/</code> directory of the package.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="fu">save</span>(dx,dy,dz,<span class="at">file=</span><span class="st">&quot;dx.rda&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" tabindex="-1"></a><span class="fu">save</span>(dx, dy, dz, <span class="at">file=</span><span class="st">&quot;dx.rda&quot;</span>)</span></code></pre></div>
 </div>
 </div>
 </div>

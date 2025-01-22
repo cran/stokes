@@ -12,14 +12,33 @@ dx <- d(1)
 dy <- d(2)
 dz <- d(3)
 
+## -----------------------------------------------------------------------------
+v <- c(2,3,7)
+c(as.function(dx)(v),as.function(dx+dy)(v),as.function(dx+100*dz)(v))
+
+## -----------------------------------------------------------------------------
+e(1,3)
+e(2,3)
+e(3,3)
+
+## -----------------------------------------------------------------------------
+u <- e(1,3)
+v <- e(2,3)
+w <- e(3,3)
+matrix(c(
+    as.function(dx)(u), as.function(dx)(v), as.function(dx)(w),
+    as.function(dy)(u), as.function(dy)(v), as.function(dy)(w),
+    as.function(dz)(u), as.function(dz)(v), as.function(dz)(w)
+),3,3)
+
+## -----------------------------------------------------------------------------
+as.function(dx ^ dy)(cbind(c(2,3,5),c(4,1,2)))
+
 ## ----label=showdx-------------------------------------------------------------
 dx
 
 ## ----label=morecomplicatedcombination-----------------------------------------
-dx^dy -7*dx^dz + 3*dy^dz
-
-## ----coercedxtoafunction------------------------------------------------------
-as.function(dx)(c(113,3,6))
+(X <- dx^dy -7*dx^dz + 3*dy^dz)
 
 ## ----dxdyequalsminusdydx------------------------------------------------------
 dx ^ dy == -dy ^ dx
@@ -44,8 +63,9 @@ hodge(dx)
 hodge(dx,3)
 
 ## -----------------------------------------------------------------------------
-d(1) == dx
+options(kform_symbolic_print = NULL)
+d(8)
 
 ## ----label=savedxdydz---------------------------------------------------------
-save(dx,dy,dz,file="dx.rda")
+save(dx, dy, dz, file="dx.rda")
 

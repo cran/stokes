@@ -380,7 +380,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>vcp3</span></code></pre></div>
 <pre><code>function(u,v){hodge(as.1form(u)^as.1form(v))}</code></pre>
 <p>To cite the <code>stokes</code> package in publications, please use
-<span class="citation">Hankin (2022b)</span>. The <em>vector cross
+<span class="citation">Hankin (<a href="#ref-hankin2022_stokes">2022b</a>)</span>. The <em>vector cross
 product</em> of two vectors <span class="math inline">\(\mathbf{u},\mathbf{v}\in\mathbb{R}^3\)</span>,
 denoted <span class="math inline">\(\mathbf{u}\times\mathbf{v}\)</span>,
 is defined in elementary mechanics as <span class="math inline">\(|\mathbf{u}||\mathbf{v}|\sin(\theta)\,\mathbf{n}\)</span>,
@@ -389,8 +389,8 @@ where <span class="math inline">\(\theta\)</span> is the angle between
 perpendicular to <span class="math inline">\(\mathbf{u}\)</span> and
 <span class="math inline">\(\mathbf{v}\)</span> such that <span class="math inline">\((\mathbf{u},\mathbf{v},\mathbf{n})\)</span> is
 positively oriented. Vector cross products find wide applications in
-physics, engineering, and computer science. <span class="citation">Spivak (1965)</span> considers the standard vector
-cross product <span class="math inline">\(\mathbf{u}\times\mathbf{v}=\det\begin{pmatrix} i
+physics, engineering, and computer science. <span class="citation">Spivak (<a href="#ref-spivak1965">1965</a>)</span>
+considers the standard vector cross product <span class="math inline">\(\mathbf{u}\times\mathbf{v}=\det\begin{pmatrix} i
 &amp; j &amp; k \\ u_1&amp;u_2&amp;u_3\\ v_1&amp;v_2&amp;v_3
 \end{pmatrix}\)</span> and places it in a more general and rigorous
 context. In a memorable passage, he states:</p>
@@ -447,9 +447,8 @@ v_1&amp;v_2&amp;v_3
 \]</span></p>
 <div id="r-implementation" class="section level2 unnumbered">
 <h2 class="unnumbered">R implementation</h2>
-<p>In the <code>stokes</code> package <span class="citation">(Hankin
-2022b)</span>, R function <code>vector_cross_product()</code> takes a
-matrix with <span class="math inline">\(n\)</span> rows and <span class="math inline">\(n-1\)</span> columns: the transpose of the work
+<p>In the <code>stokes</code> package <span class="citation">(<a href="#ref-hankin2022_stokes">Hankin 2022b</a>)</span>, R function
+<code>vector_cross_product()</code> takes a matrix with <span class="math inline">\(n\)</span> rows and <span class="math inline">\(n-1\)</span> columns: the transpose of the work
 above. This is because <code>stokes</code> (and <code>R</code>)
 convention is to interpret <em>columns</em> of a matrix as vectors. If
 we wanted to take the cross product of <span class="math inline">\(\mathbf{u}=(5,-2,1)\)</span> with <span class="math inline">\(\mathbf{v}=(1,2,0)\)</span>:</p>
@@ -492,12 +491,12 @@ taking a dot product as follows:</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>M <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(<span class="dv">42</span>),<span class="dv">7</span>,<span class="dv">6</span>)</span>
 <span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="fu">crossprod</span>(M,<span class="fu">vector_cross_product</span>(M))</span></code></pre></div>
 <pre><code>##               [,1]
-## [1,]  8.881784e-16
-## [2,] -1.346145e-15
-## [3,]  2.664535e-15
-## [4,]  3.552714e-15
-## [5,]  8.881784e-16
-## [6,]  4.787837e-15</code></pre>
+## [1,]  1.578598e-15
+## [2,]  1.110223e-16
+## [3,]  4.440892e-16
+## [4,] -3.330669e-15
+## [5,]  1.332268e-15
+## [6,] -5.440093e-15</code></pre>
 <p>Writing <span class="math inline">\(M=[v_1,\ldots,v_6]\)</span>,
 <span class="math inline">\(v_i\in\mathbb{R}^7\)</span>, we see that the
 dot product <span class="math inline">\(v_i\cdot v_1\times\cdots\times
@@ -545,24 +544,23 @@ a\cdot
 \mathbf{v}_{n}
 \]</span></p>
 <p>For the first we use a permutation <code>sigma</code> from the
-<code>permutations</code> package <span class="citation">(Hankin
-2020)</span> with a sign of <span class="math inline">\(-1\)</span>:</p>
+<code>permutations</code> package <span class="citation">(<a href="#ref-hankin2020">Hankin 2020</a>)</span> with a sign of <span class="math inline">\(-1\)</span>:</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a>M <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(<span class="dv">30</span>),<span class="dv">6</span>,<span class="dv">5</span>)</span>
 <span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="fu">as.cycle</span>(<span class="st">&quot;(12)(345)&quot;</span>)</span>
 <span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a><span class="fu">sgn</span>(sigma)</span></code></pre></div>
 <pre><code>## [1] -1</code></pre>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a>Mdash <span class="ot">&lt;-</span> M[,<span class="fu">as.function</span>(sigma)(<span class="fu">seq_len</span>(<span class="dv">5</span>))]</span>
 <span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a><span class="fu">vector_cross_product</span>(M) <span class="sc">+</span> <span class="fu">vector_cross_product</span>(Mdash)</span></code></pre></div>
-<pre><code>## [1] -1.776357e-15 -2.220446e-16  0.000000e+00 -1.776357e-15  1.776357e-15
-## [6] -3.330669e-16</code></pre>
+<pre><code>## [1]  0.000000e+00  5.551115e-17  1.332268e-15 -1.776357e-15  0.000000e+00
+## [6]  0.000000e+00</code></pre>
 <p>Above we see that the the two vector cross products add to zero (up
 to numerical precision), as they should because <code>sigma</code> is an
 odd permutation. For the second:</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a>Mdash <span class="ot">&lt;-</span> M</span>
 <span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a>Mdash[,<span class="dv">3</span>] <span class="ot">&lt;-</span> pi<span class="sc">*</span>Mdash[,<span class="dv">3</span>]</span>
 <span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a><span class="fu">vector_cross_product</span>(Mdash) <span class="sc">-</span> <span class="fu">vector_cross_product</span>(M) <span class="sc">*</span> pi</span></code></pre></div>
-<pre><code>## [1]  3.552714e-15 -8.326673e-16 -1.776357e-15  3.552714e-15 -3.552714e-15
-## [6]  2.220446e-16</code></pre>
+<pre><code>## [1]  1.065814e-14 -8.881784e-16 -3.552714e-15  7.105427e-15 -1.776357e-15
+## [6]  0.000000e+00</code></pre>
 <p>Above we see that the second product is <span class="math inline">\(\pi\)</span> times the first (to numerical
 precision), by linearity of the vector cross product. For the third:</p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a>M1 <span class="ot">&lt;-</span> M</span>
@@ -574,8 +572,8 @@ precision), by linearity of the vector cross product. For the third:</p>
 <span id="cb23-7"><a href="#cb23-7" tabindex="-1"></a>M2[,<span class="dv">3</span>] <span class="ot">&lt;-</span> v2</span>
 <span id="cb23-8"><a href="#cb23-8" tabindex="-1"></a>Msum[,<span class="dv">3</span>] <span class="ot">&lt;-</span> v1<span class="sc">+</span>v2</span>
 <span id="cb23-9"><a href="#cb23-9" tabindex="-1"></a><span class="fu">vector_cross_product</span>(M1) <span class="sc">+</span> <span class="fu">vector_cross_product</span>(M2) <span class="sc">-</span> <span class="fu">vector_cross_product</span>(Msum)</span></code></pre></div>
-<pre><code>## [1] -1.776357e-15  4.440892e-16  0.000000e+00 -3.552714e-15  1.776357e-15
-## [6]  2.775558e-17</code></pre>
+<pre><code>## [1]  0.000000e+00  2.220446e-16  0.000000e+00 -3.552714e-15  1.776357e-15
+## [6]  1.942890e-16</code></pre>
 <p>Above we see that the sum of the first two products is equal to that
 of the third (up to numerical precision), again by linearity of the
 vector cross product.</p>
@@ -605,7 +603,7 @@ value calculated directly with the wedge product:</p>
 ##  1 2 3 4 5  =   7.170485
 ##  1 2 4 5 6  =   3.344998
 ##  1 2 3 5 6  =  -6.853352
-##  1 3 4 5 6  =  -1.966103
+##  1 3 4 5 6  =  -1.966102
 ##  2 3 4 5 6  =  -4.431826
 ##  1 2 3 4 6  =  11.879641</code></pre>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a>(ans2 <span class="ot">&lt;-</span> <span class="fu">hodge</span>(jj))</span></code></pre></div>
@@ -613,7 +611,7 @@ value calculated directly with the wedge product:</p>
 ##               val
 ##  5  =  -11.879641
 ##  1  =    4.431826
-##  2  =   -1.966103
+##  2  =   -1.966102
 ##  4  =   -6.853352
 ##  3  =   -3.344998
 ##  6  =    7.170485</code></pre>
@@ -628,7 +626,7 @@ to produce the same answer using slightly slicker idiom:</p>
 ##  3  =   -3.344998
 ##  1  =    4.431826
 ##  5  =  -11.879641
-##  2  =   -1.966103
+##  2  =   -1.966102
 ##  6  =    7.170485</code></pre>
 <p>[again note the different order in the output]. Above, we see that
 the output of <code>vector_cross_product()</code> [<code>ans1</code>] is
@@ -637,15 +635,17 @@ an ordinary R vector, but the direct result [<code>ans2</code>] is a
 <code>ans2</code> to a 1-form and then subtract:</p>
 <div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" tabindex="-1"></a>(diff <span class="ot">&lt;-</span> <span class="fu">as.1form</span>(ans1) <span class="sc">-</span> ans3)</span></code></pre></div>
 <pre><code>## An alternating linear map from V^1 to R with V=R^6:
-##        val
-##  1  =    0
-##  2  =    0
-##  3  =    0
-##  5  =    0
-##  6  =    0</code></pre>
+##                  val
+##  1  =   3.552714e-15
+##  2  =   1.776357e-15
+##  3  =  -1.332268e-15
+##  4  =   1.776357e-15
+##  5  =   7.105427e-15
+##  6  =  -4.440892e-15</code></pre>
 <div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" tabindex="-1"></a><span class="fu">coeffs</span>(diff)</span></code></pre></div>
-<pre><code>## A disord object with hash dd72472bf71aceb8700b0990953a3c9cf7326de3 and elements
-## [1]  3.552714e-15  1.332268e-15 -4.440892e-16  7.105427e-15 -4.440892e-15
+<pre><code>## A disord object with hash 8e9298ff6d77253137fe25d06acabd9c369e4321 and elements
+## [1]  3.552714e-15  1.776357e-15 -1.332268e-15  1.776357e-15  7.105427e-15
+## [6] -4.440892e-15
 ## (in some order)</code></pre>
 <p>Above we see that <code>ans1</code> and <code>ans3</code> match to
 within numerical precision.</p>
@@ -675,10 +675,9 @@ explicit. Suppose we wish to take the vector cross product of <span class="math 
 ##  2  =   -1
 ##  3  =   -7</code></pre>
 <p>Above, note the order of the lines is implementation-specific as per
-<code>disordR</code> discipline <span class="citation">(Hankin
-2022a)</span>, but the form itself should agree with basis vector
-evaluation given below. Object <code>p</code> is the vector cross
-product of <span class="math inline">\(\mathbf{u}\)</span> and <span class="math inline">\(\mathbf{v}\)</span>, but is given as a one-form.
+<code>disordR</code> discipline <span class="citation">(<a href="#ref-hankin2022_disordR">Hankin 2022a</a>)</span>, but the form
+itself should agree with basis vector evaluation given below. Object
+<code>p</code> is the vector cross product of <span class="math inline">\(\mathbf{u}\)</span> and <span class="math inline">\(\mathbf{v}\)</span>, but is given as a one-form.
 We can see the mnemonic in operation by coercing <code>p</code> to a
 function and then evaluating this on the three basis vectors of <span class="math inline">\(\mathbb{R}^3\)</span>:</p>
 <div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" tabindex="-1"></a>ucv  <span class="ot">&lt;-</span> <span class="fu">as.function</span>(p)</span>

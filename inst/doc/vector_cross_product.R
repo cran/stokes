@@ -94,7 +94,7 @@ M <- matrix(rnorm(30),6,5)
 coeffs(diff)
 
 ## ----showalternativevcp,eval=FALSE--------------------------------------------
-#  function(u,v){contract(volume(3),cbind(u,v))}
+# function(u,v){contract(volume(3),cbind(u,v))}
 
 ## ----showvcp3-----------------------------------------------------------------
 vcp3

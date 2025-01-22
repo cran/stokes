@@ -397,7 +397,7 @@ package</h1>
     return(out)
 }</code></pre>
 <p>To cite the <code>stokes</code> package in publications, please use
-<span class="citation">Hankin (2022)</span>. Given a <span class="math inline">\(k\)</span>-form <span class="math inline">\(\phi\colon V^k\longrightarrow\mathbb{R}\)</span>
+<span class="citation">Hankin (<a href="#ref-hankin2022_stokes">2022</a>)</span>. Given a <span class="math inline">\(k\)</span>-form <span class="math inline">\(\phi\colon V^k\longrightarrow\mathbb{R}\)</span>
 and a vector <span class="math inline">\(\mathbf{v}\in V\)</span>, the
 <em>contraction</em> <span class="math inline">\(\phi_\mathbf{v}\)</span> of <span class="math inline">\(\phi\)</span> and <span class="math inline">\(\mathbf{v}\)</span> is a <span class="math inline">\(k-1\)</span>-form with</p>
 <p><span class="math display">\[
@@ -405,7 +405,7 @@ and a vector <span class="math inline">\(\mathbf{v}\in V\)</span>, the
   \phi\left(\mathbf{v},\mathbf{v}^1,\ldots,\mathbf{v}^{k-1}\right)
 \]</span></p>
 <p>provided <span class="math inline">\(k&gt;1\)</span>; if <span class="math inline">\(k=1\)</span> we specify <span class="math inline">\(\phi_\mathbf{v}=\phi(\mathbf{v})\)</span>. If
-<span class="citation">Spivak (1965)</span> does discuss this, I have
+<span class="citation">Spivak (<a href="#ref-spivak1965">1965</a>)</span> does discuss this, I have
 forgotten it. Function <code>contract_elementary()</code> is a low-level
 helper function that translates elementary <span class="math inline">\(k\)</span>-forms with coefficient 1 (in the form
 of an integer vector corresponding to one row of an index matrix) into
@@ -500,7 +500,7 @@ b\psi_\mathbf{v}\)</span>.</p>
 <pre><code>## [1] TRUE</code></pre>
 <div id="contraction-of-products" class="section level2">
 <h2>Contraction of products</h2>
-<p><span class="citation">Weintraub (2014)</span> gives us the following
+<p><span class="citation">Weintraub (<a href="#ref-weintraub2014">2014</a>)</span> gives us the following
 theorem, for any <span class="math inline">\(k\)</span>-form <span class="math inline">\(\phi\)</span> and <span class="math inline">\(l\)</span>-form <span class="math inline">\(\psi\)</span>:</p>
 <p><span class="math display">\[
 \left(\phi\wedge\psi\right)_\mathbf{v} =
@@ -617,8 +617,8 @@ this may be verified as follows:</p>
 <span id="cb45-3"><a href="#cb45-3" tabindex="-1"></a>LHS <span class="ot">&lt;-</span> <span class="fu">det</span>(V)</span>
 <span id="cb45-4"><a href="#cb45-4" tabindex="-1"></a>RHS <span class="ot">&lt;-</span> <span class="fu">contract</span>(o,V)</span>
 <span id="cb45-5"><a href="#cb45-5" tabindex="-1"></a><span class="fu">c</span>(<span class="at">LHS=</span>LHS,<span class="at">RHS=</span>RHS,<span class="at">diff=</span>LHS<span class="sc">-</span>RHS)</span></code></pre></div>
-<pre><code>##      LHS      RHS     diff 
-## 6.355108 6.355108 0.000000</code></pre>
+<pre><code>##          LHS          RHS         diff 
+## 6.355108e+00 6.355108e+00 1.776357e-15</code></pre>
 <p>Above we see agreement to within numerical error.</p>
 </div>
 <div id="contraction-from-first-principles" class="section level2">
@@ -628,16 +628,16 @@ with vector <span class="math inline">\(\mathbf{v}=(v_1\mathbf{e}_1,\ldots,v_k\m
 Thus we seek <span class="math inline">\(\phi_\mathbf{v}\)</span> with
 <span class="math inline">\(\phi_\mathbf{v}\left(\mathbf{v}_1,\ldots,\mathbf{v}_{k-1}\right)
 = dx^{i_1}\wedge\cdots\wedge
-dx^{i_k}\left(\mathbf{v},\mathbf{v}_1,\ldots\mathbf{v}_{k-1}\right)\)</span>.
+dx^{i_k}\left(\mathbf{v},\mathbf{v}_1,\ldots,\mathbf{v}_{k-1}\right)\)</span>.
 Writing <span class="math inline">\(\mathbf{v}=v_1\mathbf{e}_1+\cdots+\mathbf{e}_k\)</span>,
 we have</p>
 <p><span class="math display">\[\begin{eqnarray}
 \phi_\mathbf{v}\left(\mathbf{v}_1,\ldots,\mathbf{v}_{k-1}\right)
 &amp;=&amp;
 dx^{i_1}\wedge\cdots\wedge
-dx^{i_k}\left(\mathbf{v},\mathbf{v}_1,\ldots\mathbf{v}_{k-1}\right)\\&amp;=&amp;
+dx^{i_k}\left(\mathbf{v},\mathbf{v}_1,\ldots,\mathbf{v}_{k-1}\right)\\&amp;=&amp;
 dx^{i_1}\wedge\cdots\wedge
-dx^{i_k}\left(v_1\mathbf{e}_1+\cdots+v_k\mathbf{e}_k,\mathbf{v}_1,\ldots\mathbf{v}_{k-1}\right)\\&amp;=&amp;
+dx^{i_k}\left(v_1\mathbf{e}_1+\cdots+v_k\mathbf{e}_k,\mathbf{v}_1,\ldots,\mathbf{v}_{k-1}\right)\\&amp;=&amp;
 v_1 dx^{i_1}\wedge\cdots\wedge
 dx^{i_k}\left(\mathbf{e}_1,\mathbf{v}_1,\ldots,\mathbf{v}_{k-1}\right)+\cdots+
 v_k dx^{i_1}\wedge\cdots\wedge

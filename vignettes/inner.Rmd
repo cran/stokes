@@ -3,6 +3,7 @@ title: "The `inner()` function in the `stokes` package"
 author: "Robin K. S. Hankin"
 output: html_vignette
 bibliography: stokes.bib
+link-citations: true
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteIndexEntry{inner}
@@ -76,7 +77,7 @@ inner(diag(7))
 ```
 
 Note how the rows of the tensor appear in arbitrary order, as per
-`disordR` dicipline [@hankin2022_disordR].  Verify:
+`disordR` discipline [@hankin2022_disordR].  Verify:
 
 ```{r}
 x <- rnorm(7)

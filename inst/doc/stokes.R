@@ -320,4 +320,5 @@ k <- 0
 rm(i)
 rm(j)
 rm(k)
+rm(phi)
 

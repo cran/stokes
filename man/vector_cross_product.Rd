@@ -5,7 +5,7 @@
 \description{
 
   The vector cross product \eqn{\mathbf{u}\times\mathbf{v}}{omitted}
-  for \eqn{\mathbf{u},\mathbf{u}\in\mathbb{R}^3}{omitted} is defined
+  for \eqn{\mathbf{u},\mathbf{v}\in\mathbb{R}^3}{omitted} is defined
   in elementary school as
 
   \deqn{
@@ -42,7 +42,7 @@ A joint function profile for \code{vector_cross_product()} and
 
 }
 \author{Robin K. S. Hankin}
-\seealso{\code{\link{cross}}}
+\seealso{\code{\link{wedge}}}
 \examples{
 
 vector_cross_product(matrix(1:6,3,2))
